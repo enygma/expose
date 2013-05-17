@@ -115,7 +115,7 @@ class Manager
      * 
      * @param \Expose\FilterCollection $filters Filter collection
      */
-    public function setFilters($filters)
+    public function setFilters(\Expose\FilterCollection $filters)
     {
         $this->filters = $filters;
     }
