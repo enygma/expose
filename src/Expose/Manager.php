@@ -49,6 +49,7 @@ class Manager
         $this->setData($data);
         $data = $this->getData();
         $filters = $this->getFilters();
+        $impact = $this->impact;
 
         // run each of the filters on the data
         $dataIterator = new \RecursiveIteratorIterator($data);
@@ -58,7 +59,7 @@ class Manager
             foreach ($filters as $filter) {
                 if ($filter->execute($value) === true) {
                     $filterMatches[] = $filter;
-                    $this->impact += $filter->getImpact();
+                    $impact += $filter->getImpact();
                 }
             }
 
@@ -68,6 +69,7 @@ class Manager
                 $this->reports[] = $report;
             }
         }
+        $this->setImpact($impact);
     }
 
     /**
@@ -88,6 +90,16 @@ class Manager
     public function getImpact()
     {
         return $this->impact;
+    }
+
+    /**
+     * Set the overall impact value of the execution
+     * 
+     * @param integer $impact Impact value
+     */
+    public function setImpact($impact)
+    {
+        $this->impact = $impact;
     }
 
     /**
