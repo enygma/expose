@@ -69,4 +69,14 @@ class Manager
     {
         return $this->filters;
     }
+
+    public function export($format = 'text')
+    {
+        $className = '\\Expose\\Export\\'.ucwords(strtolower($format));
+        if (class_exists($className)) {
+            $export = new $className($this->getReports());
+            return $export->render();
+        }
+        return null;
+    }
 }
