@@ -27,5 +27,12 @@ $manager->run($data);
 
 echo 'impact: '.$manager->getImpact()."\n"; // should return 8
 
+// get all matching filter reports
+$reports = $manager->getReports();
+print_r($reports);
+
+// export out the report in the given format ("text" is default)
+echo $manager->export();
+echo "\n\n";
 ?>
 ```
