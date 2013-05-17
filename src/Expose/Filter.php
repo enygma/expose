@@ -23,7 +23,7 @@ class Filter
             $data = get_object_vars($data);
         }
         foreach ($data as $index => $value) {
-            if ($index == 'tags') {
+            if ($index == 'tags' && !is_array($value)) {
                 // normalize to an array
                 $value->tag = (!is_array($value->tag)) ? array($value->tag) : $value->tag;
             }
