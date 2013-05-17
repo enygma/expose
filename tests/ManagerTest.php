@@ -185,4 +185,28 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $manager->run($data);
         $this->assertEquals($manager->getImpact(), 0);
     }
+
+    /**
+     * Test that a field marked as an exception based on a regex wildcard is ignored
+     * 
+     * @covers \Expose\Manager::setException
+     * @covers \Expose\Manager::run
+     */
+    public function testExceptionWildcardIsIgnored()
+    {
+        $filterCollection = new \Expose\FilterCollection();
+        $filterCollection->setFilterData($this->sampleFilters);
+
+        $manager = new \Expose\Manager($filterCollection);
+        $manager->setException('foo[0-9]+');
+
+        $data = array(
+            'POST' => array(
+                'foo1234' => 'testmatch1'
+            )
+        );        
+
+        $manager->run($data);
+        $this->assertEquals($manager->getImpact(), 0);
+    }
 }

@@ -174,13 +174,21 @@ class Manager
 
     /**
      * Test to see if a variable is an exception
+     *     Checks can be exceptions, so we preg_match it
      * 
      * @param string $varName Variable name
      * @return boolean Found/not found
      */
     public function isException($varName)
     {
-        return in_array($varName, $this->exceptions);
+        $isException = false;
+        foreach ($this->exceptions as $exceptions) {
+            if ($isException === false && preg_match('/'.$exceptions.'/', $varName) !== 0) {
+                $isException = true;
+            }
+        }
+
+        return $isException;
     }
 
     /**
