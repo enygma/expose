@@ -60,11 +60,6 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
         }
     }
 
-    // public function __construct()
-    // {
-    //     $this->load();
-    // }
-
     public function load($path = null)
     {
         $loadFile = $this->filterPath;
