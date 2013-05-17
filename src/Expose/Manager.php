@@ -7,6 +7,7 @@ class Manager
     private $data = null;
     private $filters = null;
     private $impact = 0;
+    private $reports = array();
 
     public function __construct(\Expose\FilterCollection $filters)
     {
@@ -20,15 +21,28 @@ class Manager
         $filters = $this->getFilters();
 
         // run each of the filters on the data
-        foreach(new \RecursiveIteratorIterator($data) as $index => $value) {
-            echo $index.' --> '; print_r($value);
+        $dataIterator = new \RecursiveIteratorIterator($data);
+        foreach($dataIterator as $index => $value) {
 
+            $filterMatches = array();
             foreach ($filters as $filter) {
                 if ($filter->execute($value) === true) {
+                    $filterMatches[] = $filter;
                     $this->impact += $filter->getImpact();
                 }
             }
+
+            if (!empty($filterMatches)) {
+                $report = new \Expose\Report($index, $value);
+                $report->addFilterMatch($filterMatches);
+                $this->reports[] = $report;
+            }
         }
+    }
+
+    public function getReports()
+    {
+        return $this->reports;
     }
 
     public function getImpact()
