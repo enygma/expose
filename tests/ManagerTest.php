@@ -145,4 +145,44 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $export = $manager->export('notvalid');
         $this->assertNull($export);
     }
+
+    /**
+     * Test the getter/setter for exceptions to processing
+     * 
+     * @covers \Expose\Manager::setException
+     * @covers \Expose\Manager::isException
+     * @covers \Expose\Manager::getExceptions
+     */
+    public function testGetSetException()
+    {
+        $this->manager->setException('testme');
+        $this->assertTrue($this->manager->isException('testme'));
+
+        $exceptions = $this->manager->getExceptions();
+        $this->assertTrue(in_array('testme', $exceptions));
+    }
+
+    /**
+     * Test that a field marked as an exception is ignored
+     * 
+     * @covers \Expose\Manager::setException
+     * @covers \Expose\Manager::run
+     */
+    public function testExceptionIsIgnored()
+    {
+        $filterCollection = new \Expose\FilterCollection();
+        $filterCollection->setFilterData($this->sampleFilters);
+
+        $manager = new \Expose\Manager($filterCollection);
+        $manager->setException('foo');
+
+        $data = array(
+            'POST' => array(
+                'foo' => 'testmatch1'
+            )
+        );        
+
+        $manager->run($data);
+        $this->assertEquals($manager->getImpact(), 0);
+    }
 }

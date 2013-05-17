@@ -28,6 +28,11 @@ class Manager
      */
     private $reports = array();
 
+    /**
+     * Names of varaibles to ignore (exceptions to the rules)
+     * @var array
+     */
+    private $exceptions = array();
 
     /**
      * Init the object and assign the filters
@@ -54,6 +59,11 @@ class Manager
         // run each of the filters on the data
         $dataIterator = new \RecursiveIteratorIterator($data);
         foreach($dataIterator as $index => $value) {
+
+            // see if it's an exception
+            if ($this->isException($index)) {
+                continue;
+            }
 
             $filterMatches = array();
             foreach ($filters as $filter) {
@@ -140,6 +150,37 @@ class Manager
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    /**
+     * Add a variable name for an exception
+     * 
+     * @param string $varName Variable name
+     */
+    public function setException($varName)
+    {
+        $this->exceptions[] = $varName;
+    }
+
+    /**
+     * Get a list of all exceptions
+     * 
+     * @return array Exception list
+     */
+    public function getExceptions()
+    {
+        return $this->exceptions;
+    }
+
+    /**
+     * Test to see if a variable is an exception
+     * 
+     * @param string $varName Variable name
+     * @return boolean Found/not found
+     */
+    public function isException($varName)
+    {
+        return in_array($varName, $this->exceptions);
     }
 
     /**
