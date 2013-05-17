@@ -1,6 +1,8 @@
 Expose: an IDS for PHP
 =========================
 
+[![Build Status](https://secure.travis-ci.org/enygma/expose.png?branch=master)](http://travis-ci.org/enygma/expose)
+
 Expose is an IDS for PHP loosely based on the PHPIDS project (and using it's ruleset
 for detecting potential threats).
 
