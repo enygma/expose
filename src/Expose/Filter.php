@@ -23,6 +23,10 @@ class Filter
             $data = get_object_vars($data);
         }
         foreach ($data as $index => $value) {
+            if ($index == 'tags') {
+                // normalize to an array
+                $value->tag = (!is_array($value->tag)) ? array($value->tag) : $value->tag;
+            }
             $this->$index = $value;
         }
     }
@@ -32,9 +36,23 @@ class Filter
         return $this->impact;
     }
 
+    public function getTags()
+    {
+        return $this->tags->tag;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function execute($data)
     {
-        echo $this->description."\n";
         return (preg_match('/'.$this->rule.'/', $data) === 1) ? true : false;
     }
 }
