@@ -106,4 +106,12 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
             return $this->filterData;
         }
     }
+    
+    /**
+     * @param string $path Location of json filter set
+     */
+    public function setFilterPath($path)
+    {
+        $this->filterPath=$path;
+    }
 }
