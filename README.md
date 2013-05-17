@@ -6,6 +6,11 @@ Expose: an IDS for PHP
 Expose is an IDS for PHP loosely based on the PHPIDS project (and using it's ruleset
 for detecting potential threats).
 
+**ALL CREDIT** for the rule set for Expose goes to the PHP IDS project. Expose literally
+uses the same JSON configuration for its execution. I am not claiming any kind of ownership
+or authorship of these rules. Please see [the PHPIDS github README](https://github.com/PHPIDS/PHPIDS)
+for names of those who have contributed.
+
 **Example usage:**
 
 ```php
