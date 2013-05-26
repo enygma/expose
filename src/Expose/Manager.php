@@ -182,7 +182,8 @@ class Manager
      */
     public function setException($path)
     {
-        $this->exceptions[] = $path;
+        $path = (!is_array($apth)) ? array($path) : $path;
+        $this->exceptions[] = array_merge($this->exceptions, $path);
     }
 
     /**
