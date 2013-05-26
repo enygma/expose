@@ -53,33 +53,56 @@ class Manager
     {
         $this->setData($data);
         $data = $this->getData();
-        $filters = $this->getFilters();
         $impact = $this->impact;
 
-        // run each of the filters on the data
-        $dataIterator = new \RecursiveIteratorIterator($data);
-        foreach($dataIterator as $index => $value) {
+        $path = array();
+        $filterMatches = $this->runFilters($data, $path);
+    }
+
+    /**
+     * Run through the filters on the given data
+     * 
+     * @param array $data Data to check
+     * @param array $path Current "path" in the data
+     * @param integer $lvl Current nesting level
+     * @return array Set of filter matches
+     */
+    public function runFilters($data, $path, $lvl = 0)
+    {
+        $filterMatches = array();
+
+        foreach ($data as $index => $value) {
+            if (count($path) > $lvl) {
+                $path = array_slice($path, 0, $lvl);
+            }
+            $path[] = $index;
 
             // see if it's an exception
             if ($this->isException($index)) {
                 continue;
             }
 
-            $filterMatches = array();
-            foreach ($filters as $filter) {
-                if ($filter->execute($value) === true) {
-                    $filterMatches[] = $filter;
-                    $impact += $filter->getImpact();
+            if (is_array($value)) {
+                $lvl++;
+                $filterMatches = array_merge(
+                    $filterMatches,
+                    $this->runFilters($value, $path, $lvl)
+                );
+            } else {
+                foreach ($this->getFilters() as $filter) {
+                    if ($filter->execute($value) === true) {
+                        $filterMatches[] = $filter;
+
+                        $report = new \Expose\Report($index, $value);
+                        $report->addFilterMatch($filter);
+                        $this->reports[] = $report;
+
+                        $this->impact += $filter->getImpact();
+                    }
                 }
             }
-
-            if (!empty($filterMatches)) {
-                $report = new \Expose\Report($index, $value);
-                $report->addFilterMatch($filterMatches);
-                $this->reports[] = $report;
-            }
         }
-        $this->setImpact($impact);
+        return $filterMatches;
     }
 
     /**
