@@ -175,10 +175,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new \Expose\Manager($filterCollection);
         $manager->setException('foo');
+        $manager->setException('baz');
 
         $data = array(
             'POST' => array(
-                'foo' => 'testmatch1'
+                'foo' => 'testmatch1',
+                'bar' => array(
+                    'baz' => 'testmatch2'
+                )
             )
         );        
 
