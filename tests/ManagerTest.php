@@ -174,8 +174,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filterCollection->setFilterData($this->sampleFilters);
 
         $manager = new \Expose\Manager($filterCollection);
-        $manager->setException('foo');
-        $manager->setException('baz');
+        $manager->setException('POST.foo');
+        $manager->setException('POST.bar.baz');
 
         $data = array(
             'POST' => array(
@@ -202,7 +202,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filterCollection->setFilterData($this->sampleFilters);
 
         $manager = new \Expose\Manager($filterCollection);
-        $manager->setException('foo[0-9]+');
+        $manager->setException('POST.foo[0-9]+');
 
         $data = array(
             'POST' => array(

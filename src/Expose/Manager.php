@@ -78,7 +78,7 @@ class Manager
             $path[] = $index;
 
             // see if it's an exception
-            if ($this->isException($index)) {
+            if ($this->isException(implode('.', $path))) {
                 continue;
             }
 
@@ -180,9 +180,9 @@ class Manager
      * 
      * @param string $varName Variable name
      */
-    public function setException($varName)
+    public function setException($path)
     {
-        $this->exceptions[] = $varName;
+        $this->exceptions[] = $path;
     }
 
     /**
@@ -199,14 +199,15 @@ class Manager
      * Test to see if a variable is an exception
      *     Checks can be exceptions, so we preg_match it
      * 
-     * @param string $varName Variable name
+     * @param string $path Variable "path" (Ex. "POST.foo.bar")
      * @return boolean Found/not found
      */
-    public function isException($varName)
+    public function isException($path)
     {
         $isException = false;
         foreach ($this->exceptions as $exceptions) {
-            if ($isException === false && preg_match('/'.$exceptions.'/', $varName) !== 0) {
+            $ex = str_replace('.', '\\.', $exceptions);
+            if ($isException === false && preg_match('/^'.$ex.'$/', $path) !== 0) {
                 $isException = true;
             }
         }
