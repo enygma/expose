@@ -1,0 +1,23 @@
+{
+    "name":"enygma/expose",
+    "type":"library",
+    "description":"An intrusion detection library based on PHPIDS",
+    "keywords":["ids","intrusion","detection"],
+    "homepage":"https://github.com/enygma/expose.git",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Chris Cornutt",
+            "email":"ccornutt@phpdeveloper.org",
+            "homepage":"http://www.phpdeveloper.org/"
+        }
+    ],
+    "require":{
+        "php":">=5.3.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "Expose": "vendor/enygma/expose/src/"
+        }
+    }
+}
