@@ -197,6 +197,27 @@ class Manager
     }
 
     /**
+     * Add a path to restrict the checking to
+     * 
+     * @param string|array $path Path(s) to add to the restrictions
+     */
+    public function setRestriction($path)
+    {
+        $path = (!is_array($path)) ? array($path) : $path;
+        $this->restrctions = array_merge($this->restrctions, $path);
+    }
+
+    /**
+     * Get the list of all current restrictions
+     * 
+     * @return array Set of restrictions
+     */
+    public function getRestrictions()
+    {
+        return $this->restrctions;
+    }
+
+    /**
      * Test to see if a variable is an exception
      *     Checks can be exceptions, so we preg_match it
      * 
