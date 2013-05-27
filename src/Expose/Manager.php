@@ -35,6 +35,12 @@ class Manager
     private $exceptions = array();
 
     /**
+     * Data "paths" to restrict checking to
+     * @var array
+     */
+    private $restrctions = array();
+
+    /**
      * Init the object and assign the filters
      * 
      * @param \Expose\FilterCollection $filters Set of filters
@@ -70,6 +76,7 @@ class Manager
     public function runFilters($data, $path, $lvl = 0)
     {
         $filterMatches = array();
+        $restrictions = $this->getRestrictions();
 
         foreach ($data as $index => $value) {
             if (count($path) > $lvl) {
@@ -83,12 +90,20 @@ class Manager
             }
 
             if (is_array($value)) {
-                $lvl++;
+                $l = $lvl+1;
                 $filterMatches = array_merge(
                     $filterMatches,
-                    $this->runFilters($value, $path, $lvl)
+                    $this->runFilters($value, $path, $l)
                 );
             } else {
+                
+                $p = implode('.', $path);
+
+                // See if we have restrictions & if the path matches
+                if (!empty($restrictions) && !in_array($p, $restrictions)) {
+                    continue;
+                }
+
                 foreach ($this->getFilters() as $filter) {
                     if ($filter->execute($value) === true) {
                         $filterMatches[] = $filter;
