@@ -46,7 +46,7 @@ echo "\n\n";
 
 ### Exceptions & Restrictions
 
-Expose lets you define two things o help with the evaluation of the data - *exceptions*
+Expose lets you define two things to help with the evaluation of the data - *exceptions*
 and *restrictions*. Here's a definition of each:
 
 #### Exceptions
