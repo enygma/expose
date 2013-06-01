@@ -90,3 +90,18 @@ $manager->run($data);
 ```
 
 In this case, the filters would only run on `POST.foo.bar` and *not* on `POST.baz`.
+
+#### Using the Command-line
+
+Also included is a command line tool that can give you more information about the filters 
+in the system. Here's an example of its use:
+
+##### Return the full list of filters
+```sh
+bin/expose filter
+```
+
+##### Return the details on one filter
+````sh
+bin/expose filter --id=37
+```
