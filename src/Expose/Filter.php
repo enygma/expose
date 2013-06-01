@@ -94,7 +94,7 @@ class Filter
      */
     public function getTags()
     {
-        return $this->tags->tag;
+        return (isset($this->tags->tag)) ? $this->tags->tag : array();
     }
 
     /**
