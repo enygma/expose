@@ -174,4 +174,20 @@ class Filter
     {
         return (preg_match('/'.$this->rule.'/', $data) === 1) ? true : false;
     }
+
+    /**
+     * Return the current Filter's data as an array
+     * 
+     * @return array Filter data
+     */
+    public function toArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'rule' => $this->getRule(),
+            'description' => $this->getDescription(),
+            'tags' => implode(', ', $this->getTags()),
+            'impact' => $this->getImpact()
+        );
+    }
 }
