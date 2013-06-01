@@ -274,7 +274,7 @@ class Manager
      * 
      * @param \MonoLog\Logger $logger Logger instance
      */
-    public function setLogger(\MonoLog\Logger $logger)
+    public function setLogger($logger)
     {
         $this->logger = $logger;
     }
