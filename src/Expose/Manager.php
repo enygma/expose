@@ -40,14 +40,20 @@ class Manager
      */
     private $restrctions = array();
 
+    private $logger = null;
+
     /**
      * Init the object and assign the filters
      * 
      * @param \Expose\FilterCollection $filters Set of filters
      */
-    public function __construct(\Expose\FilterCollection $filters)
+    public function __construct(\Expose\FilterCollection $filters, $logger = null)
     {
         $this->setFilters($filters);
+
+        if ($logger !== null) {
+            $this->setLogger($logger);
+        }
     }
 
     /**
@@ -57,6 +63,8 @@ class Manager
      */
     public function run(array $data)
     {
+        $this->getLogger()->info('Executing on data '.md5(print_r($data, true)));
+
         $this->setData($data);
         $data = $this->getData();
         $impact = $this->impact;
@@ -86,6 +94,7 @@ class Manager
 
             // see if it's an exception
             if ($this->isException(implode('.', $path))) {
+                $this->getLogger()->info('Exception found on '.$path);
                 continue;
             }
 
@@ -101,11 +110,19 @@ class Manager
 
                 // See if we have restrictions & if the path matches
                 if (!empty($restrictions) && !in_array($p, $restrictions)) {
+                    $this->getLogger()->info(
+                        'Restrictions enabled, no match on path '.implode('.', $path),
+                        array('restrictions' => $restrictions)
+                    );
                     continue;
                 }
 
-                foreach ($this->getFilters() as $filter) {
+                foreach ($this->getFilters() as $index => $filter) {
                     if ($filter->execute($value) === true) {
+                        $this->getLogger()->info(
+                            'Match found on Filter ID '.$filter->getId(),
+                            array($filter->toArray())
+                        );
                         $filterMatches[] = $filter;
 
                         $report = new \Expose\Report($index, $value);
@@ -250,6 +267,36 @@ class Manager
         }
 
         return $isException;
+    }
+
+    /**
+     * Set the current instance's logger object
+     * 
+     * @param \MonoLog\Logger $logger Logger instance
+     */
+    public function setLogger(\MonoLog\Logger $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * Get the current logger instance
+     *     If it's not set, use Monolog to create a new one (default is for Mongo)
+     * 
+     * @return \Monolog\Logger
+     */
+    public function getLogger()
+    {
+        if ($this->logger === null) {
+            // make a new Monolog logger for MongoDB
+            $logger = new \Monolog\Logger('audit');
+            $handler = new \Monolog\Handler\MongoDBHandler(new \Mongo(), 'expose', 'logs');
+            $logger->pushHandler($handler);
+            $this->setLogger($logger);
+            return $logger;
+        }
+
+        return $this->logger;
     }
 
     /**
