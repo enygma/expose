@@ -2,6 +2,8 @@
 
 namespace Expose;
 
+require_once 'MockLogger.php';
+
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
     private $manager = null;
@@ -17,8 +19,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $logger = new \stdClass();
         $filters = new \Expose\FilterCollection();
-        $this->manager = new \Expose\Manager($filters);
+        $this->manager = new \Expose\Manager($filters, $logger);
     }
 
     public function executeFilters($data)
@@ -26,7 +29,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filterCollection = new \Expose\FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
 
-        $manager = new \Expose\Manager($filterCollection);
+        $logger = new MockLogger();
+        $manager = new \Expose\Manager($filterCollection, $logger);
         $manager->run($data);
 
         return $manager;
@@ -173,7 +177,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filterCollection = new \Expose\FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
 
-        $manager = new \Expose\Manager($filterCollection);
+        $logger = new MockLogger();
+        $manager = new \Expose\Manager($filterCollection, $logger);
         $manager->setException('POST.foo');
         $manager->setException('POST.bar.baz');
 
@@ -201,7 +206,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filterCollection = new \Expose\FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
 
-        $manager = new \Expose\Manager($filterCollection);
+        $logger = new MockLogger();
+        $manager = new \Expose\Manager($filterCollection, $logger);
         $manager->setException('POST.foo[0-9]+');
 
         $data = array(
