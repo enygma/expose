@@ -12,7 +12,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             "id" => "2",
             "rule" => "testmatch[0-9]+",
             "description" => "hard-coded match string",
-            "tags" => array('tag' => array('test', 'sample')),
+            "tags" => array('test', 'sample'),
             "impact" => 2
         ),
     );
