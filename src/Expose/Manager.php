@@ -40,7 +40,17 @@ class Manager
      */
     private $restrctions = array();
 
+    /**
+     * Logger instance
+     * @var object
+     */
     private $logger = null;
+
+    /**
+     * Configuration object
+     * @var \Expose\Config
+     */
+    private $config = null;
 
     /**
      * Init the object and assign the filters
@@ -297,6 +307,40 @@ class Manager
         }
 
         return $this->logger;
+    }
+
+    /**
+     * Set the configuration for the object
+     * 
+     * @param array|string $config Either an array of config settings
+     *     or the path to the config file
+     * @throws \InvalidArgumentException If config file doesn't exist
+     */
+    public function setConfig($config)
+    {
+        if (is_array($config)) {
+            $this->config = new Config($config);
+        } else {
+            // see if it's a file path
+            if (is_file($config)) {
+                $cfg = parse_ini_file($config);
+                $this->config = new Config($cfg);
+            } else {
+                throw new \InvalidArgumentException(
+                    'Could not load configuration file '.$config
+                );
+            }
+        }
+    }
+
+    /**
+     * Get the configuration object/settings
+     * 
+     * @return \Expose\Config object
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
