@@ -26,7 +26,7 @@ class Filter
      * Filter tag set
      * @var array
      */
-    private $tags = null;
+    private $tags = array();
 
     /**
      * Filter impact rating
@@ -58,8 +58,9 @@ class Filter
         }
         foreach ($data as $index => $value) {
             if ($index == 'tags' && !is_array($value)) {
-                // normalize to an array
-                $value->tag = (!is_array($value->tag)) ? array($value->tag) : $value->tag;
+                if (isset($value->tag)) {
+                    $value = (!is_array($value->tag)) ? array($value->tag) : $value->tag;
+                }
             }
             $this->$index = $value;
         }
@@ -94,7 +95,7 @@ class Filter
      */
     public function getTags()
     {
-        return (isset($this->tags->tag)) ? $this->tags->tag : array();
+        return (isset($this->tags)) ? $this->tags : array();
     }
 
     /**
@@ -105,10 +106,7 @@ class Filter
      */
     public function setTags($tags)
     {
-        if (!isset($this->tags)) {
-            $this->tags = new \stdClass();
-        }
-        $this->tags->tag = $tags;
+        $this->tags = $tags;
         return $this;
     }
 
