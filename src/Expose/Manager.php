@@ -104,7 +104,7 @@ class Manager
 
             // see if it's an exception
             if ($this->isException(implode('.', $path))) {
-                $this->getLogger()->info('Exception found on '.$path);
+                $this->getLogger()->info('Exception found on '.implode('.', $path));
                 continue;
             }
 
