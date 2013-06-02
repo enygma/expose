@@ -26,7 +26,7 @@ class Filter
      * Filter tag set
      * @var array
      */
-    private $tags = array();
+    private $tags = null;
 
     /**
      * Filter impact rating
@@ -105,6 +105,9 @@ class Filter
      */
     public function setTags($tags)
     {
+        if (!isset($this->tags)) {
+            $this->tags = new \stdClass();
+        }
         $this->tags->tag = $tags;
         return $this;
     }
