@@ -4,7 +4,35 @@ namespace Expose;
 
 class Config
 {
+    /**
+     * Configuration data
+     * @var array
+     */
     private $config = array();
+
+    /**
+     * Init the object and set data if given
+     * 
+     * @param array $data Configuration data
+     */
+    public function __construct(array $data = null)
+    {
+        if ($data !== null) {
+            $this->load($data);
+        }
+    }
+
+    /**
+     * Load the data into the object
+     * 
+     * @param array $data Configuration data
+     */
+    public function load(array $data)
+    {
+        foreach ($data as $index => $value) {
+            $this->set($index, $value);
+        }
+    }
 
     /**
      * Get the value from the config by "path"
