@@ -105,3 +105,5 @@ bin/expose filter
 ````sh
 bin/expose filter --id=37
 ```
+
+@author Chris Cornutt <ccornutt@phpdeveloper.org>
