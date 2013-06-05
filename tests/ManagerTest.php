@@ -167,6 +167,74 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the getter/setter for restrictions
+     * 
+     * @covers \Expose\Manager::setRestriction
+     * @covers \Expose\Manager::getRestrictions
+     */
+    public function testGetSetRestriction()
+    {
+        $restriction = 'POST.bar.testing';
+        $this->manager->setRestriction($restriction);
+        $this->assertEquals(
+            $this->manager->getRestrictions(),
+            array($restriction)
+        );
+    }
+
+    /**
+     * Test the getter/setter for the log resource/table
+     * 
+     * @covers \Expose\Manager::setLogResource
+     * @covers \Expose\Manager::getLogResource
+     */
+    public function testGetSetLogResource()
+    {
+        $resource = 'logs';
+        $this->manager->setLogResource($resource);
+        $this->assertEquals(
+            $this->manager->getLogResource(),
+            $resource
+        );
+    }
+
+    /**
+     * Test the getter/setter for the log database option
+     * 
+     * @covers \Expose\Manager::setLogDatabase
+     * @covers \Expose\Manager::getLogDatabase
+     */
+    public function testGetSetLogDatabase()
+    {
+        $databaseName = 'expose';
+        $this->manager->setLogDatabase($databaseName);
+        $this->assertEquals(
+            $this->manager->getLogDatabase(),
+            $databaseName
+        );
+    }
+
+    /**
+     * Test the setup of the config based on an array (not a file)
+     * 
+     * @covers \Expose\Manager::setConfig
+     * @covers \Expose\Manager::getConfig
+     * @covers \Expose\Config::toArray
+     */
+    public function testSetupConfigArray()
+    {
+        $settings = array(
+            'test' => 'foo'
+        );
+        $this->manager->setConfig($settings);
+        $config = $this->manager->getConfig();
+        $this->assertEquals(
+            $config->toArray(),
+            $settings
+        );
+    }
+
+    /**
      * Test that a field marked as an exception is ignored
      * 
      * @covers \Expose\Manager::setException
