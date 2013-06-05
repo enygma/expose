@@ -41,6 +41,18 @@ class Manager
     private $restrctions = array();
 
     /**
+     * Name of database to use for logging
+     * @var string
+     */
+    private $logDatabase = 'expose';
+
+    /**
+     * "Resource" to use for logging (Ex. table name)
+     * @var string
+     */
+    private $logResource = 'logs';
+
+    /**
      * Logger instance
      * @var object
      */
@@ -260,6 +272,42 @@ class Manager
     }
 
     /**
+     * Get the log "resource" (Ex. database table name)
+     * @return string Resouce name
+     */
+    public function getLogResource()
+    {
+        return $this->logResource;
+    }
+
+    /**
+     * Set the log "resource" name
+     * @param string $resourceName Resource name
+     */
+    public function setLogResource($resourceName)
+    {
+        $this->logResource = $resourceName;
+    }
+
+    /**
+     * Get the logging database name
+     * @return string Database name
+     */
+    public function getLogDatabase()
+    {
+        return $this->logDatabase;
+    }
+
+    /**
+     * Set the logging database name
+     * @param string $dbname Database name
+     */
+    public function setLogDatabase($dbname)
+    {
+        $this->logDatabase = $dbname;
+    }
+
+    /**
      * Test to see if a variable is an exception
      *     Checks can be exceptions, so we preg_match it
      * 
@@ -300,8 +348,16 @@ class Manager
         if ($this->logger === null) {
             // make a new Monolog logger for MongoDB
             $logger = new \Monolog\Logger('audit');
-            $handler = new \Monolog\Handler\MongoDBHandler(new \Mongo(), 'expose', 'logs');
+            $handler = new \Monolog\Handler\MongoDBHandler(
+                new \Mongo(),
+                $this->getLogDatabase(),
+                $this->getLogResource()
+            );
             $logger->pushHandler($handler);
+            $logger->pushProcessor(function ($record) {
+                $record['datetime'] = $record['datetime']->format('U');
+                return $record;
+            });
             $this->setLogger($logger);
             return $logger;
         }
