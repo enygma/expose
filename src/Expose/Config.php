@@ -87,4 +87,14 @@ class Config
             $count++;
         }
     }
+
+    /**
+     * Return the config options as just the array
+     * 
+     * @return array Config options
+     */
+    public function toArray()
+    {
+        return $this->config;
+    }
 }
