@@ -106,4 +106,7 @@ bin/expose filter
 bin/expose filter --id=37
 ```
 
+If you're curious as to the importance of application-level intrusion detection, check out [this article](https://www.owasp.org/index.php/ApplicationLayerIntrustionDetection)
+on the OWASP site.
+
 @author Chris Cornutt <ccornutt@phpdeveloper.org>
