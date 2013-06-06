@@ -12,11 +12,14 @@ class FilterCommand extends Command
     protected function configure()
     {
         $this->setName('filter')
-            ->setDescription('Sample test')
+            ->setDescription('List out all of the current filter information')
             ->setDefinition(array(
                 new InputOption('id', 'id', InputOption::VALUE_NONE, 'Filter ID to describe')
             ))
-            ->setHelp('this is a <info>test</info>');
+            ->setHelp(
+                'This command lets you list out all of the current filter information including:'
+                .' ID, Rule (regex), Description, Related Tags and Impact value'
+            );
     }
 
     /**
