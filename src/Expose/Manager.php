@@ -87,6 +87,11 @@ class Manager
     {
         $this->getLogger()->info('Executing on data '.md5(print_r($data, true)));
 
+        if ($this->getConfig()->get('queue_requests') !== null) {
+            $this->logRequest($data);
+            return true;
+        }
+
         $this->setData($data);
         $data = $this->getData();
         $impact = $this->impact;
@@ -157,6 +162,17 @@ class Manager
             }
         }
         return $filterMatches;
+    }
+
+    /**
+     * Log the request information
+     * 
+     * @param array $requestData Request data
+     */
+    public function logRequest($requestData)
+    {
+        $queue = new \Expose\Queue();
+        $queue->add($requestData);
     }
 
     /**
