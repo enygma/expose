@@ -30,6 +30,21 @@ class ProcessQueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        throw new \Exception('Not implemented yet');
+        $path = array();
+        $queue = new \Expose\Queue();
+        $records = $queue->pending();
+
+        $filters = new \Expose\FilterCollection();
+        $filters->load();
+
+        $manager = new \Expose\Manager($filters);
+
+        foreach ($records as $record) {
+            $manager->runFilters($record['data'], $path);
+            $queue->markProcessed($record['_id']);
+        }
+
+        // not sure what to do here yet
+        print_r($manager->getReports());
     }
 }
