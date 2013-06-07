@@ -87,7 +87,8 @@ class Manager
     {
         $this->getLogger()->info('Executing on data '.md5(print_r($data, true)));
 
-        if ($this->getConfig()->get('queue_requests') !== null) {
+        $config = $this->getConfig();
+        if ($config !== null && $config->get('queue_requests') !== null) {
             $this->logRequest($data);
             return true;
         }
