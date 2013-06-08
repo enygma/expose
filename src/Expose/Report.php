@@ -101,4 +101,25 @@ class Report
     {
         return $this->filterMatches;
     }
+
+    /**
+     * Convert the object to an array
+     * 
+     * @return array Filter data
+     */
+    public function toArray($expandFilters = false)
+    {
+        $matches = $this->getFilterMatch();
+        if ($expandFilters === true) {
+            foreach ($matches as $index => $match) {
+                $matches[$index] = $match->toArray();
+            }
+        }
+
+        return array(
+            'varName' => $this->getVarName(),
+            'varValue' => $this->getVarValue(),
+            'filterMatches' => $matches
+        );
+    }
 }
