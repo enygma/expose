@@ -1,4 +1,5 @@
 language: php
+before_script: phpenv config-add travis-config.ini
 php:
   - 5.3
 script: phpunit --configuration tests/phpunit.xml tests/
