@@ -114,7 +114,7 @@ class Queue
     {
         return $this->getCollection()->update(
             array('_id' => $id),
-            array('processed' => true)
+            array('$set' => array('processed' => true))
         );
     }
 
@@ -123,11 +123,12 @@ class Queue
      * 
      * @return array Record results
      */
-    public function pending()
+    public function pending($limit = 10)
     {
         $results = $this->getCollection()
-            ->find(array('processed' => false));
-            
+            ->find(array('processed' => false))
+            ->limit($limit);
+
         return iterator_to_array($results);
     }
 }
