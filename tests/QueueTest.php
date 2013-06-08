@@ -1,5 +1,7 @@
 <?php
 
+include_once 'MockMongoCollection.php';
+
 class QueueTest extends \PHPUnit_Framework_TestCase
 {
     private $queue = null;
@@ -12,16 +14,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
      */
     public function getQueueMock($return)
     {
-        $collection = $this->getMock(
-            '\\MongoCollection', 
-            array('find'),
-            array(),
-            'MockMongoCollection',
-            false
-        );
-        $collection->expects($this->once())
-            ->method('find')
-            ->will($this->returnValue(new \ArrayIterator($return)));
+        $collection = new \Expose\MockMongoCollection($return);
 
         $mock = $this->getMock('\\Expose\\Queue', array('getCollection'));
         $mock->expects($this->once())
