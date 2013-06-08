@@ -101,7 +101,6 @@ class Queue
             'processed' => false
         );
 
-        $db = new \MongoClient();
         return $this->getCollection()->insert($data);
     }
 
@@ -113,10 +112,6 @@ class Queue
      */
     public function markProcessed($id)
     {
-        $queueDatabase = $this->getDatabase();
-        $queueResource = $this->getResource();
-
-        $db = new \MongoClient();
         return $this->getCollection()->update(
             array('_id' => $id),
             array('processed' => true)
@@ -130,12 +125,9 @@ class Queue
      */
     public function pending()
     {
-        $queueDatabase = $this->getDatabase();
-        $queueResource = $this->getResource();
-
-        $db = new \MongoClient();
         $results = $this->getCollection()
             ->find(array('processed' => false));
+            
         return iterator_to_array($results);
     }
 }
