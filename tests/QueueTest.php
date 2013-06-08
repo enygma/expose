@@ -4,6 +4,12 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 {
     private $queue = null;
 
+    /**
+     * Get a mock of the Queue object that returns the given results
+     * 
+     * @param mixed $return Return data
+     * @return Mocked object
+     */
     public function getQueueMock($return)
     {
         $db = new \MongoDB(new \MongoClient(), 'expose');
@@ -22,6 +28,42 @@ class QueueTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($collection));
         
         return $mock;
+    }
+
+    /**
+     * Test the getter/setter for the database name
+     * 
+     * @covers \Expose\Queue::setDatabase
+     * @covers \Expose\Queue::getDatabase
+     */
+    public function testGetSetDatabase()
+    {
+        $database = 'expose';
+        $queue = new \Expose\Queue();
+        $queue->setDatabase($database);
+
+        $this->assertEquals(
+            $queue->getDatabase(),
+            $database
+        );
+    }
+
+    /**
+     * Test the getter/setter for the resource name
+     * 
+     * @covers \Expose\Queue::setResource
+     * @covers \Expose\Queue::getResource
+     */
+    public function testGetSetResource()
+    {
+        $resource = 'queue';
+        $queue = new \Expose\Queue();
+        $queue->setResource($resource);
+
+        $this->assertEquals(
+            $queue->getResource(),
+            $resource
+        );
     }
 
     /**
