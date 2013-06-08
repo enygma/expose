@@ -13,8 +13,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     public function getQueueMock($return)
     {
         $client = $this->getMock('\\MongoClient');
+        $db = $this->getMock('\\MongoDB', null, array($client, 'expose'));
 
-        $db = new \MongoDB($client, 'expose');
         $collection = $this->getMock(
             '\\MongoCollection', 
             array('find'),
