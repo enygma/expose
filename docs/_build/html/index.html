@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Expose - PHP Intrusion Detection &mdash; Expose 1.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Expose 1.3 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Expose 1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="expose-php-intrusion-detection">
+<h1>Expose - PHP Intrusion Detection<a class="headerlink" href="#expose-php-intrusion-detection" title="Permalink to this headline">¶</a></h1>
+<p><strong>Expose</strong> is an Intrusion Detection System for PHP loosely based on the PHPIDS project (and using it&#8217;s ruleset for detecting potential threats). You can find the latest version over on <a class="reference external" href="http://github.com/enygma/expose">it&#8217;s github page</a>.</p>
+<p><strong>ALL CREDIT</strong> for the rule set for Expose goes to the PHP IDS project. Expose literally uses the same JSON configuration for its execution. I am not claiming any kind of ownership or authorship of these rules. Please see the PHPIDS github README for names of those who have contributed.</p>
+</div>
+<div class="section" id="requirements">
+<h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h1>
+<p>Expose requires:</p>
+<ul class="simple">
+<li>PHP 5.3</li>
+<li>MongoDB support</li>
+<li>A MongoDB server to write to</li>
+</ul>
+<p>The Mongo instance is used for two things - to write out the logging for the tool and, optionally, for
+use with the offline processing via the queue.</p>
+</div>
+<div class="section" id="sample-code">
+<h1>Sample Code<a class="headerlink" href="#sample-code" title="Permalink to this headline">¶</a></h1>
+<p>The code below is a simple example of using Expose to handle the incoming data (<tt class="docutils literal"><span class="pre">$data</span></tt>) and process it against
+the filter rules. It also shows some of the helper methods you can get to get the results of the
+filter run.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;POST&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;test&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;bar&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">&#39;baz&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;quux&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;testing&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&lt;script&gt;test&lt;/script&gt;&#39;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">);</span>
+
+<span class="nv">$filters</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Expose\FilterCollection</span><span class="p">();</span>
+<span class="nv">$filters</span><span class="o">-&gt;</span><span class="na">load</span><span class="p">();</span>
+
+<span class="nv">$manager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Expose\Manager</span><span class="p">(</span><span class="nv">$filters</span><span class="p">);</span>
+<span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="s1">&#39;impact: &#39;</span><span class="o">.</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">getImpact</span><span class="p">()</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span> <span class="c1">// should return 8</span>
+
+<span class="c1">// get all matching filter reports</span>
+<span class="nv">$reports</span> <span class="o">=</span> <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">getReports</span><span class="p">();</span>
+<span class="nb">print_r</span><span class="p">(</span><span class="nv">$reports</span><span class="p">);</span>
+
+<span class="c1">// export out the report in the given format (&quot;text&quot; is default)</span>
+<span class="k">echo</span> <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">export</span><span class="p">();</span>
+<span class="k">echo</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="real-time-versus-queued-handling">
+<h1>Real-time versus Queued Handling<a class="headerlink" href="#real-time-versus-queued-handling" title="Permalink to this headline">¶</a></h1>
+<p>Expose allows for two kinds of processing - real-time as the request comes in and delayed (queued). This can be controlled
+with the <tt class="docutils literal"><span class="pre">queue_requests</span></tt> setting in the configuration. If it is set to true, Expose will take the request data and
+insert it into the data store.</p>
+<p>Real-time reporting will process the impact scores of the matching rules and report back the results. These results
+can be fetched with the <tt class="docutils literal"><span class="pre">getReports</span></tt> method (as shown above). You&#8217;re then free to do with the results as you wish.</p>
+<p>Queued processing can be handled by something like a cron job using the command-line tool. When enabled, the request
+data is pushed into the data store with a <tt class="docutils literal"><span class="pre">processed</span></tt> value of <tt class="docutils literal"><span class="pre">false</span></tt>. The CLI then grabs the latest entries
+from this queue and processes them against the rules. The results are either directly outputted in a JSON format
+or can be written to an external file.</p>
+<p>See the section on command line usage for more information.</p>
+</div>
+<div class="section" id="exceptions">
+<h1>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h1>
+<p>Expose lets you define two things to help with the evaluation of the data - exceptions and restrictions. Here&#8217;s a definition of each:</p>
+<p>Exceptions</p>
+<p>An exception basically allows you to say &#8220;evaluate everything except this value&#8221;. For example, to bypass the POSTed value of &#8220;foo&#8221; you would use:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">setException</span><span class="p">(</span><span class="s1">&#39;POST.foo&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This bypasses the value for that field and doesn&#8217;t execute the filters on it.</p>
+</div>
+<div class="section" id="restrictions">
+<h1>Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this headline">¶</a></h1>
+<p>A restriction lets you tell Expose to only evaluate certain values and ignore all others. For example, we might have more data than we care around coming in and only want to check the value of POST.foo.bar:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;POST&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;foo&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">&#39;bar&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;test one&#39;</span>
+        <span class="p">),</span>
+        <span class="s1">&#39;baz&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;test two&#39;</span>
+    <span class="p">)</span>
+<span class="p">);</span>
+
+<span class="nv">$filters</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Expose\FilterCollection</span><span class="p">();</span>
+<span class="nv">$filters</span><span class="o">-&gt;</span><span class="na">load</span><span class="p">();</span>
+
+<span class="nv">$manager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Expose\Manager</span><span class="p">(</span><span class="nv">$filters</span><span class="p">);</span>
+<span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">setRestriction</span><span class="p">(</span><span class="s1">&#39;POST.foo.bar&#39;</span><span class="p">);</span>
+<span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In this case, the filters would only run on <tt class="docutils literal"><span class="pre">POST.foo.bar</span></tt> and not on <cite>POST.baz</cite>.</p>
+</div>
+<div class="section" id="command-line">
+<h1>Command Line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h1>
+<p>Expose comes with a command-line tool to help make using the system simpler. You&#8217;ll find it in the <tt class="docutils literal"><span class="pre">bin/</span></tt>
+directory inside of your installation. The CLI script inclues a few different commands:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">filter</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">process-queue</span></tt></li>
+</ul>
+<p>Below are examples of how to use these commands.</p>
+</div>
+<div class="section" id="command-line-filters">
+<h1>Command Line - Filters<a class="headerlink" href="#command-line-filters" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">filter</span></tt> command gives you information about the filters loaded into the system. By default, it will
+give you a list of the filters and their descriptions:</p>
+<div class="highlight-sh"><div class="highlight"><pre>bin/expose filter
+</pre></div>
+</div>
+<p>The result is a list of IDs and the summaries from the filters, for example:</p>
+<div class="highlight-sh"><div class="highlight"><pre>1: finds html breaking injections including whitespace attacks
+2: finds attribute breaking injections including whitespace attacks
+3: finds unquoted attribute breaking injections
+4: Detects url-, name-, JSON, and referrer-contained payload attacks
+5: Detects <span class="nb">hash</span>-contained xss payload attacks, setter usage and property overloading
+6: Detects self contained xss via with<span class="o">()</span>, common loops and regex to string conversion
+7: Detects JavaScript with<span class="o">()</span>, ternary operators and XML predicate attacks
+</pre></div>
+</div>
+<p>To get more information about a filter, use the <tt class="docutils literal"><span class="pre">id</span></tt> option:</p>
+<div class="highlight-sh"><div class="highlight"><pre>bin/expose filter --id<span class="o">=</span>2
+</pre></div>
+</div>
+<p>You&#8217;ll be given the details about that filter:</p>
+<div class="highlight-sh"><div class="highlight"><pre>bin/expose --id<span class="o">=</span>2
+
+<span class="o">[</span>2<span class="o">]</span> finds unquoted attribute breaking injections
+    Rule: <span class="o">(</span>?:^&gt;<span class="o">[</span><span class="se">\w\s</span><span class="o">]</span>*&lt;<span class="se">\/</span>?<span class="se">\w</span><span class="o">{</span>2,<span class="o">}</span>&gt;<span class="o">)</span>
+    Tags: xss, csrf
+    Impact: 2
+</pre></div>
+</div>
+<p>Or, if you&#8217;d like information on more than one filter at a time, you can append
+them with a comma:</p>
+<div class="highlight-sh"><div class="highlight"><pre>bin/expose --id<span class="o">=</span>2,3
+
+<span class="o">[</span>2<span class="o">]</span> finds unquoted attribute breaking injections
+    Rule: <span class="o">(</span>?:^&gt;<span class="o">[</span><span class="se">\w\s</span><span class="o">]</span>*&lt;<span class="se">\/</span>?<span class="se">\w</span><span class="o">{</span>2,<span class="o">}</span>&gt;<span class="o">)</span>
+    Tags: xss, csrf
+    Impact: 2
+
+<span class="o">[</span>3<span class="o">]</span> Detects url-, name-, JSON, and referrer-contained payload attacks
+        Rule: <span class="o">(</span>?:<span class="o">[</span>+<span class="se">\/</span><span class="o">]</span><span class="se">\s</span>*name<span class="o">[</span><span class="se">\W\d</span><span class="o">]</span>*<span class="o">[)</span>+<span class="o">])</span>|<span class="o">(</span>?:;<span class="se">\W</span>*url<span class="se">\s</span>*<span class="o">=)</span>|<span class="o">(</span>?:<span class="o">[</span>^<span class="se">\w\s\/</span>?:&gt;<span class="o">]</span><span class="se">\s</span>*<span class="o">(</span>?:location|referrer|name<span class="o">)</span><span class="se">\s</span>*<span class="o">[</span>^<span class="se">\/\w\s</span>-<span class="o">])</span>
+        Tags: xss, csrf
+        Impact: 5
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-line-queue">
+<h1>Command Line - Queue<a class="headerlink" href="#command-line-queue" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">process-queue</span></tt> command lets you work with the queued request data. To use the queue processing, you
+need to enable it with the <tt class="docutils literal"><span class="pre">queue_requests</span></tt> configuration option.</p>
+<p>To process the current items in the queue, you can execute it without any command line options:</p>
+<div class="highlight-sh"><div class="highlight"><pre>bin/expose process-queue
+</pre></div>
+</div>
+<p>This will provide you some messaging about how many items it will be processing (the default is 10 records
+at a time) and output the resulting filter matches as JSON data.</p>
+<p>If you&#8217;d like to output these results to a file instead, you can use the <tt class="docutils literal"><span class="pre">export-file</span></tt> option:</p>
+<div class="highlight-sh"><div class="highlight"><pre>bin/expose process-queue --export-file<span class="o">=</span>/tmp/output.txt
+</pre></div>
+</div>
+<p>This will apprend to the file if it already exists.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Expose - PHP Intrusion Detection</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#sample-code">Sample Code</a></li>
+<li><a class="reference internal" href="#real-time-versus-queued-handling">Real-time versus Queued Handling</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#restrictions">Restrictions</a></li>
+<li><a class="reference internal" href="#command-line">Command Line</a></li>
+<li><a class="reference internal" href="#command-line-filters">Command Line - Filters</a></li>
+<li><a class="reference internal" href="#command-line-queue">Command Line - Queue</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Expose 1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Chris Cornutt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>
