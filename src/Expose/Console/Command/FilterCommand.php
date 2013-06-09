@@ -37,15 +37,18 @@ class FilterCommand extends Command
 
         $id = $input->getOption('id');
         if ($id !== false) {
-            if (array_key_exists($id, $filters)) {
-                $detail = "[".$id."] ".$filters[$id]->getDescription()."\n";
-                $detail .= "\tRule: ".$filters[$id]->getRule()."\n";
-                $detail .= "\tTags: ".implode(', ', $filters[$id]->getTags())."\n";
-                $detail .= "\tImpact: ".$filters[$id]->getImpact()."\n";
+            $idList = explode(',', $id);
+            foreach ($idList as $id) {
+                if (array_key_exists($id, $filters)) {
+                    $detail = "[".$id."] ".$filters[$id]->getDescription()."\n";
+                    $detail .= "\tRule: ".$filters[$id]->getRule()."\n";
+                    $detail .= "\tTags: ".implode(', ', $filters[$id]->getTags())."\n";
+                    $detail .= "\tImpact: ".$filters[$id]->getImpact()."\n";
 
-                $output->writeLn($detail);
-            } else {
-                $output->writeLn('Filter ID '.$id.' not found!');
+                    $output->writeLn($detail);
+                } else {
+                    $output->writeLn('Filter ID '.$id.' not found!');
+                }
             }
             return;
         }
