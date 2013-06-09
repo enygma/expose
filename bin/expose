@@ -10,7 +10,8 @@ use Symfony\Component\Console\Application;
 
 $app = new Application('Expose IDS', '0.1');
 $app->addCommands(array(
-    new \Expose\Console\Command\FilterCommand()
+    new \Expose\Console\Command\FilterCommand(),
+    new \Expose\Console\Command\ProcessQueueCommand()
 ));
 $app->run();
 ?>
