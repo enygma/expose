@@ -1,5 +1,8 @@
 language: php
-before_script: phpenv config-add travis-config.ini
+before_script:
+  - phpenv config-add travis-config.ini
+  - wget http://getcomposer.org/composer.phar
+  - php composer.phar install --dev
 php:
   - 5.3
-script: phpunit --configuration tests/phpunit.xml tests/
+script: phpunit
