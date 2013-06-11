@@ -396,7 +396,7 @@ class Manager
         } else {
             // see if it's a file path
             if (is_file($config)) {
-                $cfg = parse_ini_file($config);
+                $cfg = parse_ini_file($config, true);
                 $this->config = new Config($cfg);
             } else {
                 throw new \InvalidArgumentException(
