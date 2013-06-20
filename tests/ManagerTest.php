@@ -31,6 +31,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $logger = new MockLogger();
         $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager->setConfig(array('test' => 'foo'));
         $manager->run($data);
 
         return $manager;
@@ -247,6 +248,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $logger = new MockLogger();
         $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager->setConfig(array('test' => 'foo'));
         $manager->setException('POST.foo');
         $manager->setException('POST.bar.baz');
 
@@ -276,6 +278,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $logger = new MockLogger();
         $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager->setConfig(array('test' => 'foo'));
         $manager->setException('POST.foo[0-9]+');
 
         $data = array(
