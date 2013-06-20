@@ -87,8 +87,8 @@ class Manager
     {
         $this->getLogger()->info('Executing on data '.md5(print_r($data, true)));
 
-        $config = $this->getConfig();
-        if ($config !== null && $config->get('queue_requests') !== null) {
+        $queueRequests = $this->getConfig()->get('queue_requests');
+        if ($queueRequests == true) {
             $this->logRequest($data);
             return true;
         }
@@ -99,6 +99,10 @@ class Manager
 
         $path = array();
         $filterMatches = $this->runFilters($data, $path);
+
+        if (count($filterMatches) > 0) {
+            $this->notify($filterMatches);
+        }
     }
 
     /**
@@ -163,6 +167,31 @@ class Manager
             }
         }
         return $filterMatches;
+    }
+
+    /**
+     * If enabled, send the notification of the test run
+     * 
+     * @param array $filterMatches Set of matches against filters
+     * @throws \InvalidArgumentException If notify type is inavlid
+     */
+    public function notify(array $filterMatches)
+    {
+        if ($this->getConfig()->get('notify.enable') == true) {
+            $type = $this->getConfig()->get('notify.type');
+            $className = '\\Expose\\Notify\\'.ucwords(strtolower($type));
+
+            if (class_exists($className)) {
+                $notifyInstance = new $className(
+                    $this->getConfig()->get('notify')
+                );
+                $notifyInstance->send($filterMatches);
+            } else {
+                throw new \InvalidArgumentException(
+                    'Invalid notification type "'.$type.'"'
+                );
+            }
+        }
     }
 
     /**
