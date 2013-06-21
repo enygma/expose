@@ -201,7 +201,8 @@ class Manager
      */
     public function logRequest($requestData)
     {
-        $queue = new \Expose\Queue();
+        //$queue = new \Expose\Queue();
+        $queue = new \Expose\Queue\Mongo();
         $queue->add($requestData);
     }
 

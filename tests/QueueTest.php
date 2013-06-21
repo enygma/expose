@@ -16,48 +16,12 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     {
         $collection = new \Expose\MockMongoCollection($return);
 
-        $mock = $this->getMock('\\Expose\\Queue', array('getCollection'));
+        $mock = $this->getMock('\\Expose\\Queue\\Mongo', array('getCollection'));
         $mock->expects($this->once())
             ->method('getCollection')
             ->will($this->returnValue($collection));
         
         return $mock;
-    }
-
-    /**
-     * Test the getter/setter for the database name
-     * 
-     * @covers \Expose\Queue::setDatabase
-     * @covers \Expose\Queue::getDatabase
-     */
-    public function testGetSetDatabase()
-    {
-        $database = 'expose';
-        $queue = new \Expose\Queue();
-        $queue->setDatabase($database);
-
-        $this->assertEquals(
-            $queue->getDatabase(),
-            $database
-        );
-    }
-
-    /**
-     * Test the getter/setter for the resource name
-     * 
-     * @covers \Expose\Queue::setResource
-     * @covers \Expose\Queue::getResource
-     */
-    public function testGetSetResource()
-    {
-        $resource = 'queue';
-        $queue = new \Expose\Queue();
-        $queue->setResource($resource);
-
-        $this->assertEquals(
-            $queue->getResource(),
-            $resource
-        );
     }
 
     /**
@@ -80,7 +44,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         );
 
         $queue = $this->getQueueMock($result);
-        $results = $queue->pending();
+        $results = $queue->getPending();
         
         // be sure they're all "pending"
         $pass = true;
