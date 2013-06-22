@@ -65,6 +65,12 @@ class Manager
     private $config = null;
 
     /**
+     * Queue instance (extends \Expose\Queue)
+     * @var object
+     */
+    private $queue = null;
+
+    /**
      * Init the object and assign the filters
      * 
      * @param \Expose\FilterCollection $filters Set of filters
@@ -201,9 +207,34 @@ class Manager
      */
     public function logRequest($requestData)
     {
-        //$queue = new \Expose\Queue();
-        $queue = new \Expose\Queue\Mongo();
+        $queue = $this->getQueue();
         $queue->add($requestData);
+    }
+
+    /**
+     * Get the current queue object
+     *     If none is set, defaults to a local Mongo instance
+     * 
+     * @return object Queue instance
+     */
+    public function getQueue()
+    {
+        if ($this->queue === null) {
+            $queue = new \Expose\Queue\Mongo();
+            $this->setQueue($queue);
+        }
+        return $this->queue;
+    }
+
+    /**
+     * Set the current queue object
+     *     Extends \Expose\Queue
+     * 
+     * @param object $queue Queue instance
+     */
+    public function setQueue($queue)
+    {
+        $this->queue = $queue;
     }
 
     /**

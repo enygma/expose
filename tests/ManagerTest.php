@@ -3,6 +3,7 @@
 namespace Expose;
 
 require_once 'MockLogger.php';
+require_once 'MockQueue.php';
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -289,5 +290,36 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager->run($data);
         $this->assertEquals($manager->getImpact(), 0);
+    }
+
+    /**
+     * Test the getter/setter for the Queue object
+     * 
+     * @covers \Expose\Manager::setQueue
+     * @covers \Expose\Manager::getQueue
+     */
+    public function testGetSetQueue()
+    {
+        $queue = new \Expose\Queue\MockQueue();
+        
+        $this->manager->setQueue($queue);
+        $this->assertEquals(
+            $this->manager->getQueue(),
+            $queue
+        );
+    }
+
+    /**
+     * Getting the default queue object without setting it
+     *     first gives us the Mongo queue
+     * 
+     * @covers \Expose\Manager::getQueue
+     */
+    public function testGetDefaultQueue()
+    {
+        $queue = $this->manager->getQueue();
+        $this->assertTrue(
+            $queue instanceof \Expose\Queue\Mongo
+        );
     }
 }
