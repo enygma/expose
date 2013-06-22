@@ -2,7 +2,7 @@
 
 namespace Expose\Queue;
 
-class Mongo implements \Expose\Queue
+class Mongo extends \Expose\Queue
 {
     /**
      * Queue database name
@@ -17,6 +17,17 @@ class Mongo implements \Expose\Queue
     private $collection = 'queue';
 
     /**
+     * Return a default MongoClient instance
+     * 
+     * @return \MongoClient object
+     */
+    public function getAdapter()
+    {
+        $db = new \MongoClient();
+        return $db;
+    }
+
+    /**
      * Get the queue collection
      * 
      * @return \MongoCollection Collection instance
@@ -25,7 +36,7 @@ class Mongo implements \Expose\Queue
     {
         $queueDatabase = $this->database;
         $queueResource = $this->collection;
-        $db = new \MongoClient();
+        $db = $this->getAdapter();
 
         return $db->$queueDatabase->$queueResource;
     }
