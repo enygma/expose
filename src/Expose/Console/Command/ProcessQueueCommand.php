@@ -29,7 +29,11 @@ class ProcessQueueCommand extends Command
                 new InputOption('list', 'list', InputOption::VALUE_NONE, 
                     'List the current items in the queue'),
                 new InputOption('export-file', 'export-file', InputOption::VALUE_NONE, 
-                    'The file path to write out results to')
+                    'The file path to write out results to'),
+		new InputOption('dsn', 'dsn', InputOption::VALUE_NONE,
+		    'The DSN to use for the queue connection'),
+		new InputOption('notify-email', 'notify-email', InputOption::VALUE_NONE,
+		    'Email address to use for notifications')
             ))
             ->setHelp(
                 'This command lets you process and execute filters on the user input'
@@ -80,7 +84,16 @@ class ProcessQueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+	$dsn = $this->getOption('dsn');
+	$notifyEmail = $this->getOption('notify-email');
+
         $manager = $this->getManager();
+	if ($notifyEmail !== null) {
+		$notify = new \Expose\Notify\Email();
+		$notify->setToAddress($notifyEmail);
+		$manager->setNotify($notify);
+	}
+
         $queue = $this->getQueue();
 
         if ($input->getOption('list') !== false) {
