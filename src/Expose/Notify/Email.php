@@ -4,15 +4,45 @@ namespace Expose\Notify;
 
 class Email extends \Expose\Notify
 {
+    /**
+     * To email address for notofication
+     */
+    private $toAddress = null;
+
+    /**
+     * Set the "To" address for the notification
+     *
+     * @param string $emailAddress Email address
+     */
+    public function setToAddress($emailAddress)
+    {
+	$this->toAddress = $emailAddress;
+    }
+
+    /**
+     * Get the current "To" address for notification
+     *
+     * @return string Email address
+     */
+    public function getToAddress()
+    {
+	return $this->toAddress;
+    }
+
+    /**
+     * Send the notification to the given email address
+     * 
+     * @param array $filterMatches Set of filter matches from execution
+     * @return boolean Success/fail of sending email
+     */
     public function send($filterMatches)
     {
-        $config = $this->getConfig();
+	$toAddress = $this->getToAddress();
 
-        if (!isset($config['address'])) {
+        if ($toAddress === null) {
             throw new \InvalidArgumentExcepion('Invalid email address');
         }
 
-        $toAddress = $config['address'];
         $headers = array(
             "From: notify@expose",
             "Content-type: text/html; charset=iso-8859-1"
@@ -35,6 +65,6 @@ class Email extends \Expose\Notify
         $body .= '</table></body></html>';
         $subject = 'Expose Notification - Impact Score '.$totalImpact;
 
-        mail($toAddress, $subject, $body, implode("\r\n", $headers));
+        return mail($toAddress, $subject, $body, implode("\r\n", $headers));
     }
 }
