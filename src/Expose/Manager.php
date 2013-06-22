@@ -89,12 +89,11 @@ class Manager
      * 
      * @param array $data Data to run filters against
      */
-    public function run(array $data)
+    public function run(array $data, $queueRequests = false)
     {
         $this->getLogger()->info('Executing on data '.md5(print_r($data, true)));
 
-        $queueRequests = $this->getConfig()->get('queue_requests');
-        if ($queueRequests == true) {
+        if ($queueRequests === true) {
             $this->logRequest($data);
             return true;
         }
