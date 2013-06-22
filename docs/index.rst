@@ -262,3 +262,46 @@ If you'd like to output these results to a file instead, you can use the ``expor
 
 This will apprend to the file if it already exists.
 
+Extending Expose - Custom Queue
+==========================================
+
+By default, Expose assumes a local Mongo instance to handle the queue processing. You can, however, override this with a custom queue object of your own. It only needs to do a few things:
+
+- extend the ``\Expose\Queue`` abstract class
+- define the ``getPending``, ``markProcessed`` and ``add`` methods
+- Pass in an adapter to use
+
+So, if we wanted to use a Mongo instance on another machine, we could redefine our object like:
+
+.. code-block:: php
+
+    class MyQueue extends \Expose\Queue
+    {
+        public function add($data)
+        {
+            /* add a new record */
+        }
+        public function markProcessed($id)
+        {
+            /* update the record */
+        }
+        public function getPending($limit)
+        {
+            /* return the pending records */
+        }
+    }
+
+then, to use it:
+
+.. code-block:: php
+
+    $filters = new \Expose\FilterCollection();
+    $filters->load();
+
+    $adapter = new MongoClient('mongodb://myserver1.example.com');
+    $myQueue = new MyQueue($adapter);
+
+    $manager = new \Expose\Manager($filters);
+    $manager->setQueue($myQueue);
+
+If no queue is set with ``setQueue`` Expose will default to the Mongo version (configured for local connection).
