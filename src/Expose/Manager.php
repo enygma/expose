@@ -71,6 +71,12 @@ class Manager
     private $queue = null;
 
     /**
+     * Notify instance (for results notification)
+     * @var object
+     */
+    private $notify = null;
+
+    /**
      * Init the object and assign the filters
      * 
      * @param \Expose\FilterCollection $filters Set of filters
@@ -89,7 +95,7 @@ class Manager
      * 
      * @param array $data Data to run filters against
      */
-    public function run(array $data, $queueRequests = false)
+    public function run(array $data, $queueRequests = false, $notify = false)
     {
         $this->getLogger()->info('Executing on data '.md5(print_r($data, true)));
 
@@ -105,7 +111,7 @@ class Manager
         $path = array();
         $filterMatches = $this->runFilters($data, $path);
 
-        if (count($filterMatches) > 0) {
+        if (count($filterMatches) > 0 && $notify === true) {
             $this->notify($filterMatches);
         }
     }
@@ -182,21 +188,13 @@ class Manager
      */
     public function notify(array $filterMatches)
     {
-        if ($this->getConfig()->get('notify.enable') == true) {
-            $type = $this->getConfig()->get('notify.type');
-            $className = '\\Expose\\Notify\\'.ucwords(strtolower($type));
-
-            if (class_exists($className)) {
-                $notifyInstance = new $className(
-                    $this->getConfig()->get('notify')
-                );
-                $notifyInstance->send($filterMatches);
-            } else {
-                throw new \InvalidArgumentException(
-                    'Invalid notification type "'.$type.'"'
-                );
-            }
-        }
+	$notify = $this->getNotify();
+	if ($notify === null) {
+	    throw new \InvalidArgumentException(
+		'Invalid notification method'
+	    );
+	}
+	$notify->send($filterMatches);
     }
 
     /**
@@ -234,6 +232,16 @@ class Manager
     public function setQueue($queue)
     {
         $this->queue = $queue;
+    }
+
+    public function setNotify($notify)
+    {
+	$this->notify = $nofity;
+    }
+
+    public function getNotify()
+    {
+	return $this->notify;
     }
 
     /**
