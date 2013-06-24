@@ -30,10 +30,10 @@ class ProcessQueueCommand extends Command
                     'List the current items in the queue'),
                 new InputOption('export-file', 'export-file', InputOption::VALUE_NONE, 
                     'The file path to write out results to'),
-		new InputOption('dsn', 'dsn', InputOption::VALUE_NONE,
-		    'The DSN to use for the queue connection'),
-		new InputOption('notify-email', 'notify-email', InputOption::VALUE_NONE,
-		    'Email address to use for notifications')
+                new InputOption('dsn', 'dsn', InputOption::VALUE_NONE,
+                    'The DSN to use for the queue connection'),
+                new InputOption('notify-email', 'notify-email', InputOption::VALUE_NONE,
+                    'Email address to use for notifications')
             ))
             ->setHelp(
                 'This command lets you process and execute filters on the user input'
