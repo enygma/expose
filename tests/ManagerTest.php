@@ -322,4 +322,22 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $queue instanceof \Expose\Queue\Mongo
         );
     }
+
+    /**
+     * Test the getter/setter for the notification method
+     * 
+     * @covers \Expose\Manager::getNotify
+     * @covers \Expose\Manager::setNotify
+     */
+    public function testGetSetNotify()
+    {
+        $notify = new \Expose\Notify\Email();
+
+        $this->manager->setNotify($notify);
+        $this->assertEquals(
+            $this->manager->getNotify(),
+            $notify
+        );
+    }
+
 }
