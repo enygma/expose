@@ -234,14 +234,24 @@ class Manager
         $this->queue = $queue;
     }
 
+    /**
+     * Set the notification method for the results
+     * 
+     * @param \Expose\Notify $notify Notification object
+     */
     public function setNotify($notify)
     {
-	$this->notify = $nofity;
+	   $this->notify = $notify;
     }
 
+    /**
+     * Get the notification method for the results
+     * 
+     * @return \Expose\Notify instance
+     */
     public function getNotify()
     {
-	return $this->notify;
+	   return $this->notify;
     }
 
     /**
