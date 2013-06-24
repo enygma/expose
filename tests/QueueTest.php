@@ -32,7 +32,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAdapterOnConstruct()
     {
-        $adapter = new \MongoClient();
+        $adapter = new \stdClass();
+        $adapter->foo = 'test';
         $queue = new \Expose\Queue\Mongo($adapter);
 
         $this->assertEquals(
@@ -49,7 +50,9 @@ class QueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSetAdapter()
     {
-        $adapter = new \MongoClient();
+        $adapter = new \stdClass();
+        $adapter->foo = 'test';
+        
         $queue = new \Expose\Queue\Mongo();
         $queue->setAdapter($adapter);
 

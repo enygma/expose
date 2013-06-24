@@ -23,8 +23,10 @@ class Mongo extends \Expose\Queue
      */
     public function getAdapter()
     {
-        $db = new \MongoClient();
-        return $db;
+        if ($this->adapter === null) {
+            $this->setAdapter(new \MongoClient());
+        }
+        return $this->adapter;
     }
 
     /**
