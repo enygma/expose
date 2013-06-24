@@ -58,4 +58,39 @@ class ReportTest extends \PHPUnit_Framework_TestCase
             $this->report->getFilterMatch()
         );
     }
+
+    /**
+     * Convert the object into an array
+     * 
+     * @covers \Expose\Report::toArray
+     */
+    public function testObjectToArray()
+    {
+        $this->report->setVarName('foo');
+        $this->report->setVarValue('bar');
+
+        $result = $this->report->toArray();
+        $this->assertTrue(
+            (isset($result['varName']) && $result['varName'] === 'foo')
+            && (isset($result['varValue']) && $result['varValue'] === 'bar')
+        );
+    }
+
+    /**
+     * Test the "expansion" of filters (converting them to arrays too)
+     * 
+     * @covers \Expose\Report::toArray
+     */
+    public function testObjectToArrayExpandFilters()
+    {
+        $filter = new \Expose\Filter();
+        $filter->setId(1234);
+
+        $this->report->addFilterMatch($filter);
+        $result = $this->report->toArray(true);
+
+        $this->assertTrue(
+            isset($result['filterMatches'][0]) && $result['filterMatches'][0]['id'] === 1234
+        );
+    }
 }
