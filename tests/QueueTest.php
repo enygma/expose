@@ -25,9 +25,44 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the setting of the adapter on object construction
+     * 
+     * @covers \Expose\Queue::__construct
+     * @covers \Expose\Queue::getAdapter
+     */
+    public function testSetAdapterOnConstruct()
+    {
+        $adapter = new \MongoClient();
+        $queue = new \Expose\Queue\Mongo($adapter);
+
+        $this->assertEquals(
+            $queue->getAdapter(),
+            $adapter
+        );
+    }
+
+    /**
+     * Test the getter/setter for the adapter of the queue
+     * 
+     * @covers \Expose\Queue::getAdapter
+     * @covers \Expose\Queue::setAdapter
+     */
+    public function testGetSetAdapter()
+    {
+        $adapter = new \MongoClient();
+        $queue = new \Expose\Queue\Mongo();
+        $queue->setAdapter($adapter);
+
+        $this->assertEquals(
+            $queue->getAdapter(),
+            $adapter
+        );
+    }
+
+    /**
      * Get the current set of pending records
      * 
-     * @covers \Expose\Queue::pending
+     * @covers \Expose\Queue::getPending
      */
     public function testGetPendingRecords()
     {
