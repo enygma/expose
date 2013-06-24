@@ -57,71 +57,13 @@ filter run.
     echo $manager->export();
     echo "\n\n";
 
-Configuration
-==================================
-
-You can either specify the configuration for Expose as a set of array values or through an ``ini`` file on the
-local filesystem.
-
-To use an array, provide the `setConfig` method call with the values directly:
-
-.. code-block:: php
-
-    $manager = new \Expose\Manager($filters);
-    $manager->setConfig(array(
-        'queue_requests' => true
-    ));
-
-The above tells Expose to send all of the request data to the queue to be processed asyncronously via a cron job or something
-running the backend CLI command. If you want to specify a file, you'd do it similarly but provide a path to a valid INI file rather than an array:
-
-.. code-block:: php
-
-    $manager = new \Expose\Manager($filters);
-    $manager->setConfig('/path/to/config.ini');
-
-The file doesn't have to be named ``config.ini`` - it'll use whatever path you give it and try to parse it as an INI-type file. If it fails, you'll get a lovely error message.
-
-Loading the configuration also allows for the use of sub-settings, so you can use the "sections" feature of INI files to split out different settings.
-
-Here's the current list of configuration options:
-
-+---------------+----------------+
-| Keyname       | Value          +
-+===============+================+
-| queue_requests| true/false     +
-+---------------+----------------+
-| notify.enable | true/false     |
-+---------------+----------------+
-| notify.type   | email          |
-+---------------+----------------+
-| notify.address| me@me.com      |
-+---------------+----------------+
-
-To set the values like those in the ``notify`` namespace, you use sub-values in arrays:
-
-.. code-block:: php
-
-    $manager = new \Expose\Manager($filters);
-    $manager->setConfig(array(
-        'notify' => array(
-            'enable' => true
-        )
-    ));
-
-or sections in the ``ini`` files:
-
-.. code-block:: sh
-
-    [nofity]
-    enable=true
-
 Real-time versus Queued Handling
 ==================================
 
 Expose allows for two kinds of processing - real-time as the request comes in and delayed (queued). This can be controlled
-with the ``queue_requests`` setting in the configuration. If it is set to true, Expose will take the request data and
-insert it into the data store.
+by setting the the ``queueRequests`` parameter on the ``run`` method in the ``Manager``. If it is set to true, Expose will take the request data and insert it into the data store.
+
+You can define your own Queuing mechanism or let Expose use it's internal default - a local Mongo instance. See more about making a custom Queue object in the "Extending Expose - Custom Queue" section below.
 
 Real-time reporting will process the impact scores of the matching rules and report back the results. These results
 can be fetched with the ``getReports`` method (as shown above). You're then free to do with the results as you wish.
