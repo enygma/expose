@@ -78,6 +78,16 @@ class ProcessQueueCommand extends Command
     }
 
     /**
+     * Set the queue object for the current execution
+     * 
+     * @param \Expose\Queue $queue instance
+     */
+    protected function setQueue($queue)
+    {
+        $this->queue = $queue;
+    }
+
+    /**
      * Execute the process-queue command
      * 
      * @param  InputInterface  $input  Input object
