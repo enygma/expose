@@ -30,6 +30,16 @@ class Mongo extends \Expose\Queue
     }
 
     /**
+     * Get the current database name
+     * 
+     * @return string Database name
+     */
+    public function getDatabase()
+    {
+        return $this->database;
+    }
+
+    /**
      * Get the queue collection
      * 
      * @return \MongoCollection Collection instance
