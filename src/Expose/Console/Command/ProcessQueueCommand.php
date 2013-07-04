@@ -164,4 +164,39 @@ class ProcessQueueCommand extends Command
         }
         return $reports;
     }
+
+    /**
+     * Build an adapter based on the type+connection string
+     * 
+     * @param string $queueType Queue type (Ex. "mongo" or "mysql")
+     * @param string $queueConnect Queue connection string (format: user:pass@host)
+     * @param string $databaseName Database name
+     * @return object Connection adapter
+     */
+    protected function buildAdapter($queueType, $queueConnect, $databaseName)
+    {
+        preg_match('/(.+):(.+)@(.+)/', $queueConnect, $connect);
+        if (count($connect) < 4) {
+            return false;
+        }
+        list($full, $username, $password, $host) = $connect;
+
+        switch(strtolower($queueType)) {
+            case 'mongo':
+                if (!extension_loaded('mongo')) {
+                    return false;
+                }
+                $connectString = 'mongodb://'.$username.':'.$password.'@'.$host.'/'.$databaseName;
+                $adapter = new \MongoClient($connectString);
+                break;
+            case 'mysql':
+                if (!extension_loaded('mysqli')) {
+                    return false;
+                }
+                $adapter = new mysqli($host, $username, $password, $databaseName);
+                break;
+        }
+
+        return $adapter;
+    }
 }
