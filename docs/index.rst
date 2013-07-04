@@ -204,6 +204,18 @@ If you'd like to output these results to a file instead, you can use the ``expor
 
 This will apprend to the file if it already exists.
 
+**Custom Queue Settings**
+
+By default, the queue system the CLI uses will look for a Mongo server running on the localhost with an ``expose`` database it can access. You can change this, however, to work with your own Mongo server (or MySQL). When using the CLI, you can add two parameters to define the type and the connect string to use - ``queue-type`` and ``queue-connect``:
+
+.. code-block:: sh
+
+    bin/expose --queue-type=mongo --queue-connect=mongoUser:testing123@db.myhost.int
+
+Using the combination of these two parameters, Expose will try to connect to the Mongo database living on the ``db.myhost.int`` server and use the ``expose`` database there. 
+
+You can also use a MySQL database in the same way, just using a type of "mysql" rather than "mongo".
+
 Extending Expose - Custom Queue
 ==========================================
 
