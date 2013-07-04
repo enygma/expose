@@ -114,6 +114,23 @@ A restriction lets you tell Expose to only evaluate certain values and ignore al
 
 In this case, the filters would only run on ``POST.foo.bar`` and not on `POST.baz`.
 
+Notifications
+===============
+
+Expose allows you to be notified of the results of its execution. You can configure the notifications by defining a *Notify* object and telling it to use it with the third parameter of the ``run`` method. For example, to send an email notification with the impact score and matching filters you could use:
+
+.. code-block:: php
+
+    $manager = new \Expose\Manager($filters);
+
+    $notify = new \Expose\Notify\Email();
+    $notify->setToAddress('sample@myemail.com');
+    $manager->setNotify($notify);
+
+    $manager->run($data, false, true);
+
+You can create your own custom notification methods by extending the ``\Expose\Notify`` abstract class and defining the ``send`` method.
+
 Command Line
 ==============
 
