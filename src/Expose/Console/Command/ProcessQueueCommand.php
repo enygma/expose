@@ -96,17 +96,42 @@ class ProcessQueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-	$dsn = $this->getOption('dsn');
-	$notifyEmail = $this->getOption('notify-email');
+        $queueType = $input->getOption('queue-type');
+        $notifyEmail = $input->getOption('notify-email');
 
         $manager = $this->getManager();
-	if ($notifyEmail !== null) {
-		$notify = new \Expose\Notify\Email();
-		$notify->setToAddress($notifyEmail);
-		$manager->setNotify($notify);
-	}
 
-        $queue = $this->getQueue();
+        if ($notifyEmail !== false) {
+            $notify = new \Expose\Notify\Email();
+            $notify->setToAddress($notifyEmail);
+            $manager->setNotify($notify);
+        }
+
+        if ($queueType !== false) {
+            $queueConnect = $input->getOption('queue-connect');
+            if ($queueConnect === false) {
+                $output->writeln('<error>Queue connection string not provided</error>');
+                return;
+            }
+            // make the queue object with the right adapter
+            $queueClass = '\\Expose\\Queue\\'.ucwords(strtolower($queueType));
+            if (!class_exists($queueClass)) {
+                $output->writeln('<error>Invalid queue type "'.$queueType.'"</error>');
+                return;
+            }
+            $queue = new $queueClass();
+
+            $adapter = $this->buildAdapter($queueType, $queueConnect, $queue->getDatabase());
+            if ($adapter === false) {
+                $output->writeln('<error>Invalid connection string</error>');
+                return;   
+            }
+            $queue->setAdapter($adapter);
+
+        } else {
+            $queue = $this->getQueue();    
+        }
+        $this->setQueue($queue);
 
         if ($input->getOption('list') !== false) {
             $output->writeln('<info>Current Queue Items Pending</info>');
