@@ -30,8 +30,10 @@ class ProcessQueueCommand extends Command
                     'List the current items in the queue'),
                 new InputOption('export-file', 'export-file', InputOption::VALUE_NONE, 
                     'The file path to write out results to'),
-                new InputOption('dsn', 'dsn', InputOption::VALUE_NONE,
-                    'The DSN to use for the queue connection'),
+                new InputOption('queue-type', 'queue-type', InputOption::VALUE_NONE,
+                    'Queue type (Ex. "mysql" or "mongo"'),
+                new InputOption('queue-connect', 'queue-connect', InputOption::VALUE_NONE,
+                    'Queue connection information: user:pass@host'),
                 new InputOption('notify-email', 'notify-email', InputOption::VALUE_NONE,
                     'Email address to use for notifications')
             ))
