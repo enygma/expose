@@ -69,7 +69,7 @@ class ProcessQueueCommand extends Command
     protected function getQueue()
     {
         if ($this->queue === null) {
-            $queue = new \Expose\Queue();
+            $queue = new \Expose\Queue\Mongo();
             $this->queue = $queue;
         } else {
             $queue = $this->queue;
@@ -144,7 +144,7 @@ class ProcessQueueCommand extends Command
         $manager = $this->getManager();
         $queue = $this->getQueue();
         $path = array();
-        $records = $queue->pending();
+        $records = $queue->getPending();
 
         $output->writeln('<info>'.count($records).' records found.</info>');
         if (count($records) == 0) {
