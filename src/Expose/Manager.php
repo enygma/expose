@@ -412,10 +412,11 @@ class Manager
     public function isException($path)
     {
         $isException = false;
-        foreach ($this->exceptions as $exceptions) {
-            $ex = str_replace('.', '\\.', $exceptions);
-            if ($isException === false && preg_match('/^'.$ex.'$/', $path) !== 0) {
-                $isException = true;
+        foreach ($this->exceptions as $exception) {
+            if ($isException === false) {
+                if ($path === $exception || preg_match('/^'.$exception.'$/', $path) !== 0) {
+                    $isException = true;
+                }
             }
         }
 
