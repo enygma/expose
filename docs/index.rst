@@ -90,6 +90,15 @@ An exception basically allows you to say "evaluate everything except this value"
 
 This bypasses the value for that field and doesn't execute the filters on it.
 
+Additionally, you exception handling is regular expression aware. This means you can do more complex matching on the incoming parameters like:
+
+.. code-block:: php
+
+    // would match "POST.var1.baz", "POST.var2.baz", etc.
+    $manager->setException('POST.var[0-9]+.baz')
+
+The string is treated like a normal regex, so be aware of the periods (as they still represent the "any character" match in the world of regex).
+
 Restrictions
 ==================
 A restriction lets you tell Expose to only evaluate certain values and ignore all others. For example, we might have more data than we care around coming in and only want to check the value of POST.foo.bar:
@@ -135,7 +144,7 @@ Command Line
 ==============
 
 Expose comes with a command-line tool to help make using the system simpler. You'll find it in the ``bin/``
-directory inside of your installation. The CLI script inclues a few different commands:
+directory inside of your installation. The CLI script includes a few different commands:
 
 * ``filter``
 * ``process-queue``
