@@ -133,7 +133,8 @@ Expose allows you to be notified of the results of its execution. You can config
     $manager = new \Expose\Manager($filters);
 
     $notify = new \Expose\Notify\Email();
-    $notify->setToAddress('sample@myemail.com');
+    $notify->setToAddress('sample@my-domain.com');
+    $notify->setFromAddress('notify@my-domain.com');
     $manager->setNotify($notify);
 
     $manager->run($data, false, true);
