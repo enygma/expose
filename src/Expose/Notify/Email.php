@@ -5,9 +5,16 @@ namespace Expose\Notify;
 class Email extends \Expose\Notify
 {
     /**
-     * To email address for notofication
+     * To email address for notifications
+     * @var string
      */
     private $toAddress = null;
+
+    /**
+     * From address for notifications
+     * @var string
+     */
+    private $fromAddress = 'notify@expose';
 
     /**
      * Set the "To" address for the notification
@@ -16,7 +23,10 @@ class Email extends \Expose\Notify
      */
     public function setToAddress($emailAddress)
     {
-	$this->toAddress = $emailAddress;
+        if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL) !== $emailAddress) {
+            throw new \InvalidArgumentExcepion('Invalid email address: '.$emailAddress);
+        }
+        $this->toAddress = $emailAddress;
     }
 
     /**
@@ -26,7 +36,30 @@ class Email extends \Expose\Notify
      */
     public function getToAddress()
     {
-	return $this->toAddress;
+        return $this->toAddress;
+    }
+
+    /**
+     * Set the current "From" email address on notifications
+     * 
+     * @param string $emailAddress Email address
+     */
+    public function setFromAddress($emailAddress)
+    {
+        if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL) !== $emailAddress) {
+            throw new \InvalidArgumentExcepion('Invalid email address: '.$emailAddress);
+        }
+        $this->fromAddress = $emailAddress;
+    }
+
+    /**
+     * Return the current "From" address setting
+     * 
+     * @return string Email address
+     */
+    public function getFromAddress()
+    {
+        return $this->fromAddress;
     }
 
     /**
@@ -37,14 +70,14 @@ class Email extends \Expose\Notify
      */
     public function send($filterMatches)
     {
-	$toAddress = $this->getToAddress();
+        $toAddress = $this->getToAddress();
 
         if ($toAddress === null) {
             throw new \InvalidArgumentExcepion('Invalid email address');
         }
 
         $headers = array(
-            "From: notify@expose",
+            "From: ".$this->getFromAddress(),
             "Content-type: text/html; charset=iso-8859-1"
         );
         $totalImpact = 0;
