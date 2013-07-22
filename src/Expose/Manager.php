@@ -444,11 +444,15 @@ class Manager
         if ($this->logger === null) {
             // make a new Monolog logger for MongoDB
             $logger = new \Monolog\Logger('audit');
-            $handler = new \Monolog\Handler\MongoDBHandler(
-                new \Mongo(),
-                $this->getLogDatabase(),
-                $this->getLogResource()
-            );
+            try {
+                $handler = new \Monolog\Handler\MongoDBHandler(
+                    new \Mongo(),
+                    $this->getLogDatabase(),
+                    $this->getLogResource()
+                );
+            } catch (\MongoConnectionException $e) {
+                throw new \Exception('Cannot connect to Mongo - please check your server');
+            }
             $logger->pushHandler($handler);
             $logger->pushProcessor(function ($record) {
                 $record['datetime'] = $record['datetime']->format('U');
