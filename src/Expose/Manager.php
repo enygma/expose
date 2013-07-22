@@ -437,7 +437,7 @@ class Manager
      * Get the current logger instance
      *     If it's not set, use Monolog to create a new one (default is for Mongo)
      * 
-     * @return \Monolog\Logger
+     * @return object PSR-3 compatible logger object
      */
     public function getLogger()
     {
