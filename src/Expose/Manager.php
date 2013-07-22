@@ -426,7 +426,7 @@ class Manager
     /**
      * Set the current instance's logger object
      * 
-     * @param \MonoLog\Logger $logger Logger instance
+     * @param object $logger PSR-3 compatible Logger instance
      */
     public function setLogger($logger)
     {
