@@ -71,13 +71,18 @@ class Email extends \Expose\Notify
     public function send($filterMatches)
     {
         $toAddress = $this->getToAddress();
+        $fromAddress = $this->getFromAddress();
 
         if ($toAddress === null) {
-            throw new \InvalidArgumentExcepion('Invalid email address');
+            throw new \InvalidArgumentExcepion('Invalid "to" email address');
+        }
+
+        if ($fromAddress === null) {
+            throw new \InvalidArgumentExcepion('Invalid "from" email address');
         }
 
         $headers = array(
-            "From: ".$this->getFromAddress(),
+            "From: ".$fromAddress,
             "Content-type: text/html; charset=iso-8859-1"
         );
         $totalImpact = 0;
