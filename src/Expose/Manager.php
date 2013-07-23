@@ -120,9 +120,9 @@ class Manager
         // Check our threshold to see if we even need to send
         $threshold = $this->getThreshold();
 
-        if ($threshold !== null && $impact >= $threshold) {
+        if ($threshold !== null && $impact >= $threshold && $notify == true) {
             return $this->sendNotification($filterMatches);
-        } else if ($threshold === null) {
+        } else if ($threshold === null && $notify == true) {
             return $this->sendNotification($filterMatches);
         }
         return true;
