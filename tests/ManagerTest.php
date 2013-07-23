@@ -25,7 +25,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->manager = new \Expose\Manager($filters, $logger);
     }
 
-    public function executeFilters($data)
+    public function executeFilters($data, $queue = false, $notify = false)
     {
         $filterCollection = new \Expose\FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
@@ -33,7 +33,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $logger = new MockLogger();
         $manager = new \Expose\Manager($filterCollection, $logger);
         $manager->setConfig(array('test' => 'foo'));
-        $manager->run($data);
+        $manager->run($data, $queue, $notify);
 
         return $manager;
     }
