@@ -111,9 +111,29 @@ class Manager
         $path = array();
         $filterMatches = $this->runFilters($data, $path);
 
-        if (count($filterMatches) > 0 && $notify === true) {
-            $this->notify($filterMatches);
+        // Check our threshold to see if we even need to send
+        $threshold = $this->getThreshold();
+
+        if ($threshold !== null && $impact >= $threshold) {
+            return $this->sendNotification($filterMatches);
+        } else if ($threshold === null) {
+            return $this->sendNotification($filterMatches);
         }
+        return true;
+    }
+
+    /**
+     * Send the notification of the matching filters
+     * 
+     * @param array $filterMatches Set of matching filter results
+     * @return boolean Success/fail of notification send
+     */
+    public function sendNotification($filterMatches)
+    {
+        if (count($filterMatches) > 0) {
+            return $this->notify($filterMatches);
+        }
+        return true;
     }
 
     /**
@@ -188,13 +208,13 @@ class Manager
      */
     public function notify(array $filterMatches)
     {
-	$notify = $this->getNotify();
-	if ($notify === null) {
-	    throw new \InvalidArgumentException(
-		'Invalid notification method'
-	    );
-	}
-	$notify->send($filterMatches);
+        $notify = $this->getNotify();
+        if ($notify === null) {
+            throw new \InvalidArgumentException(
+                'Invalid notification method'
+            );
+        }
+        $notify->send($filterMatches);
     }
 
     /**
@@ -497,6 +517,26 @@ class Manager
     public function getConfig()
     {
         return $this->config;
+    }
+
+    public function setThreshold($threshold)
+    {
+        if (is_numeric($threshold) === false) {
+            throw new \InvalidArgumentException(
+                'Invalid threshold "'.$threshold.'", must be numeric'
+            );
+        }
+        $this->threshold = $threshold;
+    }
+
+    /**
+     * Get the current threshold value
+     * 
+     * @return integer Threshold value (numeric)
+     */
+    public function getThreshold()
+    {
+        return $this->threshold;
     }
 
     /**
