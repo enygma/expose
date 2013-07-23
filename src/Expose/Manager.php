@@ -77,6 +77,12 @@ class Manager
     private $notify = null;
 
     /**
+     * Threshold setting
+     * @var integer
+     */
+    private $threshold = null;
+
+    /**
      * Init the object and assign the filters
      * 
      * @param \Expose\FilterCollection $filters Set of filters
