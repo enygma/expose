@@ -6,7 +6,7 @@
 Expose - PHP Intrusion Detection
 ==================================
 
-**Expose** is an Intrusion Detection System for PHP loosely based on the PHPIDS project (and using it's ruleset for detecting potential threats). You can find the latest version over on `it's github page <http://github.com/enygma/expose>`_.
+**Expose** (pronounced *ex-pose-a*, pretend you're French) is an Intrusion Detection System for PHP loosely based on the PHPIDS project (and using it's ruleset for detecting potential threats). You can find the latest version over on `it's github page <http://github.com/enygma/expose>`_.
 
 **ALL CREDIT** for the rule set for Expose goes to the PHP IDS project. Expose literally uses the same JSON configuration for its execution. I am not claiming any kind of ownership or authorship of these rules. Please see the PHPIDS github README for names of those who have contributed.
 
@@ -78,10 +78,6 @@ See the section on command line usage for more information.
 Exceptions
 ==================
 
-Expose lets you define two things to help with the evaluation of the data - exceptions and restrictions. Here's a definition of each:
-
-Exceptions
-
 An exception basically allows you to say "evaluate everything except this value". For example, to bypass the POSTed value of "foo" you would use:
 
 .. code-block:: php
@@ -101,6 +97,7 @@ The string is treated like a normal regex, so be aware of the periods (as they s
 
 Restrictions
 ==================
+
 A restriction lets you tell Expose to only evaluate certain values and ignore all others. For example, we might have more data than we care around coming in and only want to check the value of POST.foo.bar:
 
 .. code-block:: php
@@ -140,6 +137,20 @@ Expose allows you to be notified of the results of its execution. You can config
     $manager->run($data, false, true);
 
 You can create your own custom notification methods by extending the ``\Expose\Notify`` abstract class and defining the ``send`` method.
+
+Thresholds
+==============
+
+As the impact scores in Expose are numeric (0 through whatever, depending on the rules matched) you can easily set a threshold to prevent low-level, annoying notifications being delivered. Some applications know for a fact that they'll always be getting a certain amount of traffic that's in the 1-2 impact score range. Getting notifications for *every one* of these requests would get annoying pretty quickly, so you can set your *threshold* a bit higher:
+
+.. code-block:: php
+
+    $manager = new \Expose\Manager($filters);
+    $manage->setThreshold(8);
+
+This example sets the impact threshold to `8`, meaning that it will only send notifications when the score is **greater than or equal to** `8`. There's no concept of "HIGH", "MEDIUM" or "LOW" in Expose as these vary greatly by environment and application.
+
+**NOTE:** Currently *notifications* are the only thing that setting a threshold changes. Logging and other processing is unchanged.
 
 Command Line
 ==============
