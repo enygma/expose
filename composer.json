@@ -14,8 +14,8 @@
     ],
     "require":{
         "php":">=5.3.1",
-        "monolog/monolog": "1.6.*@dev",
-        "symfony/console": "2.1.*"
+        "monolog/monolog": "~1.4",
+        "symfony/console": "~2.1"
     },
     "autoload": {
         "psr-0": {
