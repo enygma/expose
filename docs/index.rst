@@ -16,11 +16,10 @@ Requirements
 Expose requires:
 
 * PHP 5.3
-* MongoDB support
-* A MongoDB server to write to
 
-The Mongo instance is used for two things - to write out the logging for the tool and, optionally, for 
-use with the offline processing via the queue.
+Additionally, the default for queue and logging support is a MongoDB database (so you'd need Mongo support if you want to use that) but both the Queue handler and Logging can be overwritten with your choice of adapters. 
+
+The Mongo instance is used for two things - to write out the logging for the tool and, optionally, for use with the offline processing via the queue.
 
 Sample Code
 ==================
