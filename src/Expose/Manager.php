@@ -41,18 +41,6 @@ class Manager
     private $restrctions = array();
 
     /**
-     * Name of database to use for logging
-     * @var string
-     */
-    private $logDatabase = 'expose';
-
-    /**
-     * "Resource" to use for logging (Ex. table name)
-     * @var string
-     */
-    private $logResource = 'logs';
-
-    /**
      * Logger instance
      * @var object
      */
@@ -87,12 +75,19 @@ class Manager
      * 
      * @param \Expose\FilterCollection $filters Set of filters
      */
-    public function __construct(\Expose\FilterCollection $filters, $logger = null)
+    public function __construct(
+        \Expose\FilterCollection $filters, 
+        \Expose\Log $logger = null,
+        \Expose\Queue $queue = null
+    )
     {
         $this->setFilters($filters);
 
         if ($logger !== null) {
             $this->setLogger($logger);
+        }
+        if ($queue !== null) {
+            $this->setQueue($queue);
         }
     }
 
@@ -236,15 +231,14 @@ class Manager
 
     /**
      * Get the current queue object
-     *     If none is set, defaults to a local Mongo instance
+     *     If none is set, throws an exception, we need it!
      * 
      * @return object Queue instance
      */
     public function getQueue()
     {
         if ($this->queue === null) {
-            $queue = new \Expose\Queue\Mongo();
-            $this->setQueue($queue);
+            throw new \Expose\Exception\QueueNotDefined('Queue object is not defined');
         }
         return $this->queue;
     }
@@ -461,33 +455,15 @@ class Manager
 
     /**
      * Get the current logger instance
-     *     If it's not set, use Monolog to create a new one (default is for Mongo)
+     *     If it's not set, throw an exception - we need it!
      * 
      * @return object PSR-3 compatible logger object
      */
     public function getLogger()
     {
         if ($this->logger === null) {
-            // make a new Monolog logger for MongoDB
-            $logger = new \Monolog\Logger('audit');
-            try {
-                $handler = new \Monolog\Handler\MongoDBHandler(
-                    new \Mongo(),
-                    $this->getLogDatabase(),
-                    $this->getLogResource()
-                );
-            } catch (\MongoConnectionException $e) {
-                throw new \Exception('Cannot connect to Mongo - please check your server');
-            }
-            $logger->pushHandler($handler);
-            $logger->pushProcessor(function ($record) {
-                $record['datetime'] = $record['datetime']->format('U');
-                return $record;
-            });
-            $this->setLogger($logger);
-            return $logger;
+            throw new \Expose\Exception\LoggerNotDefined('Logger instance not defined');
         }
-
         return $this->logger;
     }
 
