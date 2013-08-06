@@ -24,7 +24,7 @@ class Email extends \Expose\Notify
     public function setToAddress($emailAddress)
     {
         if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL) !== $emailAddress) {
-            throw new \InvalidArgumentExcepion('Invalid email address: '.$emailAddress);
+            throw new \InvalidArgumentException('Invalid email address: '.$emailAddress);
         }
         $this->toAddress = $emailAddress;
     }
@@ -47,7 +47,7 @@ class Email extends \Expose\Notify
     public function setFromAddress($emailAddress)
     {
         if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL) !== $emailAddress) {
-            throw new \InvalidArgumentExcepion('Invalid email address: '.$emailAddress);
+            throw new \InvalidArgumentException('Invalid email address: '.$emailAddress);
         }
         $this->fromAddress = $emailAddress;
     }
