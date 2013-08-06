@@ -20,7 +20,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $logger = new \stdClass();
+        $logger = new \Expose\Log\Mongo();
         $filters = new \Expose\FilterCollection();
         $this->manager = new \Expose\Manager($filters, $logger);
     }
@@ -311,16 +311,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Getting the default queue object without setting it
-     *     first gives us the Mongo queue
+     *     first gives us an exception
      * 
      * @covers \Expose\Manager::getQueue
+     * @expectedException \Expose\Exception\QueueNotDefined
      */
-    public function testGetDefaultQueue()
+    public function testGetUndefinedQueue()
     {
         $queue = $this->manager->getQueue();
-        $this->assertTrue(
-            $queue instanceof \Expose\Queue\Mongo
-        );
     }
 
     /**
