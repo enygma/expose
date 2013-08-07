@@ -129,7 +129,8 @@ class ProcessQueueCommand extends Command
             $queue->setAdapter($adapter);
 
         } else {
-            $queue = $this->getQueue();    
+            $output->writeln('<error>Queue type not defined</error>');
+            return;
         }
         $this->setQueue($queue);
 
