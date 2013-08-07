@@ -17,9 +17,9 @@ Expose requires:
 
 * PHP 5.3
 
-Additionally, the default for queue and logging support is a MongoDB database (so you'd need Mongo support if you want to use that) but both the Queue handler and Logging can be overwritten with your choice of adapters. 
+Additionally, the default for queue and logging support is a MongoDB database (in the ``\Expose\Log\Mongo`` class, so you'd need Mongo support if you want to use that) but both the Queue handler and Logging can be overwritten with your choice of adapters. The Logger can also be replaced with any other logger class that follows the PSR-3 standard.
 
-The Mongo instance is used for two things - to write out the logging for the tool and, optionally, for use with the offline processing via the queue.
+**NOTE:** Expose *requires* that you define a logger. Any good security tool that doesn't produce logs is pretty useless, so you're required to set one up. You can use the ``\Expose\Log\Mongo`` class already provided or create your own that matches the ``\Expose\Log`` abstract class structure.
 
 Sample Code
 ==================
@@ -43,7 +43,9 @@ filter run.
     $filters = new \Expose\FilterCollection();
     $filters->load();
 
-    $manager = new \Expose\Manager($filters);
+    $logger = new \Expose\Log\Mongo();
+
+    $manager = new \Expose\Manager($filters, $logger);
     $manager->run($data);
 
     echo 'impact: '.$manager->getImpact()."\n"; // should return 8
@@ -60,9 +62,9 @@ Real-time versus Queued Handling
 ==================================
 
 Expose allows for two kinds of processing - real-time as the request comes in and delayed (queued). This can be controlled
-by setting the the ``queueRequests`` parameter on the ``run`` method in the ``Manager``. If it is set to true, Expose will take the request data and insert it into the data store.
+by setting the the ``queueRequests`` parameter on the ``run`` method in the ``Manager``. If it is set to true, Expose will take the request data and insert it into the data store. By default, queuing is disabled.
 
-You can define your own Queuing mechanism or let Expose use it's internal default - a local Mongo instance. See more about making a custom Queue object in the "Extending Expose - Custom Queue" section below.
+If you choose to enable Queue support, you'll be required to define a Queue object to use. This can either be the included ``\Expose\Queue\Mongo`` or one of your own creation. See more about making a custom Queue object in the "Extending Expose - Custom Queue" section below.
 
 Real-time reporting will process the impact scores of the matching rules and report back the results. These results
 can be fetched with the ``getReports`` method (as shown above). You're then free to do with the results as you wish.
@@ -113,7 +115,9 @@ A restriction lets you tell Expose to only evaluate certain values and ignore al
     $filters = new \Expose\FilterCollection();
     $filters->load();
 
-    $manager = new \Expose\Manager($filters);
+    $logger = new \Expose\Log\Mongo();
+
+    $manager = new \Expose\Manager($filters, $logger);
     $manager->setRestriction('POST.foo.bar');
     $manager->run($data);
 
