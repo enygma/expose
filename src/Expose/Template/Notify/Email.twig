@@ -1,0 +1,22 @@
+<html>
+	<body>
+		Expose executed at {{ runTime }} and found the following matches in the submitted data:
+		<br/><br/>
+		<table cellspacing="0" cellpadding="3" border="0">
+		<tr><td><b>Impact</b></td><td><b>Description</b></td></tr>
+
+		{% for data in impactData %}
+			<tr><td align="center">{{ data.impact }}</td><td>
+			{{ data.description }} ({{ data.id }})</td></tr>
+			<tr><td>&nbsp;</td><td><b>Tags:</b>{{ data.tags }}</td></tr>
+			<tr><td>&nbsp;</td><td><b>Impact:</b> {{ data.impact }}</td></tr>
+			<tr><td colspan="2">&nbsp;</td></tr>
+
+		{% endfor %}
+
+		</table>
+		<p>
+			<b>Total Impact Score:</b> {{ totalImpact }}
+		</p>
+	</body>
+</html>
