@@ -81,27 +81,33 @@ class Email extends \Expose\Notify
             throw new \InvalidArgumentExcepion('Invalid "from" email address');
         }
 
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../Template');
+        $twig = new \Twig_Environment($loader);
+        $template = $twig->loadTemplate('Notify/Email.twig');
+
         $headers = array(
             "From: ".$fromAddress,
             "Content-type: text/html; charset=iso-8859-1"
         );
         $totalImpact = 0;
 
-        $body = '<html><body><table cellspacing="0" cellpadding="3" border="0">';
-        $body .= '<tr><td><b>Impact</b></td><td><b>Description</b></td></tr>';
-
+        $impactData = array();
         foreach ($filterMatches as $match) {
-            $body .= '<tr><td align="center">'.$match->getImpact().'</td><td>'
-                .$match->getDescription().' ('.$match->getId().')</td></tr>';
-            $body .= '<tr><td>&nbsp;</td><td><b>Tags:</b> '.implode(', ', $match->getTags()).'</td></tr>';
-            $body .= '<tr><td>&nbsp;</td><td><b>Impact:</b> '.$match->getImpact().'</td></tr>';
-            $body .= '<tr><td colspan="2">&nbsp;</td></tr>';
-
+            $impactData[] = array(
+                'impact' => $match->getImpact(),
+                'description' => $match->getDescription(),
+                'id' => $match->getId(),
+                'tags' => implode(', ', $match->getTags())
+            );
             $totalImpact += $match->getImpact();
         }
 
-        $body .= '</table></body></html>';
         $subject = 'Expose Notification - Impact Score '.$totalImpact;
+        $body = $template->render(array(
+            'impactData' => $impactData,
+            'runTime' => date('r'),
+            'totalImpact' => $totalImpact
+        ));
 
         return mail($toAddress, $subject, $body, implode("\r\n", $headers));
     }
