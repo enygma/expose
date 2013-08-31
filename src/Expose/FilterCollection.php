@@ -83,7 +83,7 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
                 $config = get_object_vars($config);
             }
             $filter = new \Expose\Filter($config);
-            $this->filterData[] = $filter;
+            $this->addFilter($filter);
         }
     }
 
@@ -113,5 +113,15 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
     public function setFilterPath($path)
     {
         $this->filterPath=$path;
+    }
+
+    /**
+     * Add a new Filter object to the set
+     * 
+     * @param \Expose\Filter $filter Filter object
+     */
+    public function addFilter(\Expose\Filter $filter)
+    {
+        $this->filterData[] = $filter;
     }
 }
