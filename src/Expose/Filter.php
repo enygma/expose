@@ -171,6 +171,13 @@ class Filter
         return $this;
     }
 
+    /**
+     * Execute the filter
+     *     By default, this runs the regex on the filter against the data
+     * 
+     * @param string $data Incoming data
+     * @return boolean Pass/fail of filter
+     */
     public function execute($data)
     {
         return (preg_match('/'.$this->rule.'/', $data) === 1) ? true : false;
