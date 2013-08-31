@@ -300,3 +300,23 @@ then, to use it:
     $manager->setQueue($myQueue);
 
 If no queue is set with ``setQueue`` Expose will default to the Mongo version (configured for local connection).
+
+Extending Expose - Custom Filters
+==========================================
+
+Expose lets you inect your own custom filters with your logic to be executed right along with the built in filters. The default filters use regular expressions to try to match attacks in the given data. Your custom filters can execute whatever login you want. All you have to do is add them to the ``FilterCollection``:
+
+.. code-block:: php
+
+    class CustomFilter extends \Expose\Filter
+    {
+        public function execute()
+        {
+            echo "Custom filter!\n";
+            return true;
+        }
+    }
+    $custom = new CustomFilter();
+    $filters->addFilter($custom);
+
+You just define the ``execute`` method in your filter and Expose with run it. The ``execute`` method should return ``true`` if there's a match and ``false`` if there's none.
