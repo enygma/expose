@@ -17,6 +17,22 @@ class Email extends \Expose\Notify
     private $fromAddress = 'notify@expose';
 
     /**
+     * Init the object and set to/from addresses if given
+     * 
+     * @param string $toAddress "To" email address
+     * @param string $fromAddress "From" email address
+     */
+    public function __construct($toAddress = null, $fromAddress = null)
+    {
+        if ($toAddress !== null) {
+            $this->setToAddress($toAddress);
+        }
+        if ($fromAddress !== null) {
+            $this->setFromAddress($fromAddress);
+        }
+    }
+
+    /**
      * Set the "To" address for the notification
      *
      * @param string $emailAddress Email address
