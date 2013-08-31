@@ -11,6 +11,10 @@ uses the same JSON configuration for its execution. I am not claiming any kind o
 or authorship of these rules. Please see [the PHPIDS github README](https://github.com/PHPIDS/PHPIDS)
 for names of those who have contributed.
 
+**NOTE:** An IDS system should not be relied upon for sole protection in your environment! It should only be used in 
+the first level of threat identification. Please read up on "[Defense in Depth](http://websec.io/2012/10/12/Core-Concepts-Defense-in-Depth.html)"
+for more information on a layered security approach.
+
 **Example usage:**
 
 ```php
