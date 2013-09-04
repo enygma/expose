@@ -18,6 +18,11 @@ abstract class Log
 	public abstract function debug($message, array $context = array());
 	public abstract function log($level, $message, array $context = array());
 
+    /**
+     * Init the object and connect if string is given
+     * 
+     * @param object $connectString Connection string to logger instance
+     */
 	public function __construct($connectString = null)
 	{
 		if ($connectString !== null) {
@@ -25,10 +30,21 @@ abstract class Log
 		}
 	}
 
+    /**
+     * Set the logger object instance
+     *
+     * @param object $logger Logger instance
+     */
 	public function setLogger($logger)
 	{
 		$this->logger = $logger;
 	}
+
+    /**
+     * Get the current logger instance
+     *
+     * @return object Logger instance
+     */
 	public function getLogger()
 	{
 		return $this->logger;
