@@ -155,6 +155,21 @@ This example sets the impact threshold to `8`, meaning that it will only send no
 
 **NOTE:** Currently *notifications* are the only thing that setting a threshold changes. Logging and other processing is unchanged.
 
+Caching
+=========
+
+Expose also allows for caching of the results for a request (based on the data given in the request). It does not have this enabled by default, so you'll need to add it to the Manager. For example, to add a file-based caching mechanism:
+
+.. code-block:: php
+
+    $cache = new \Expose\Cache\File();
+    $cache->setPath('/foo/bar/cache');
+
+    $manager = new \Expose\Manager($filters);
+    $manager->setCache($cache);
+
+In this example we're also settng the path for the caching mechanism to save the files to. You can integrate your own custom caching tool by extending the ``\Expose\Cache`` class.
+
 Command Line
 ==============
 
