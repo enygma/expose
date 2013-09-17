@@ -71,6 +71,12 @@ class Manager
     private $threshold = null;
 
     /**
+     * Caching mechanism
+     * @var \Expose\Cache
+     */
+    private $cache = null;
+
+    /**
      * Init the object and assign the filters
      * 
      * @param \Expose\FilterCollection $filters Set of filters
@@ -149,6 +155,15 @@ class Manager
     {
         $filterMatches = array();
         $restrictions = $this->getRestrictions();
+        $sig = md5(print_r($data, true));
+
+        $cache = $this->getCache();
+        if ($cache !== null) {
+            $cacheData = $cache->get($sig);
+            if ($cacheData !== null) {
+                return $cacheData;
+            }
+        }
 
         foreach ($data as $index => $value) {
             if (count($path) > $lvl) {
@@ -197,6 +212,10 @@ class Manager
                     }
                 }
             }
+        }
+
+        if ($cache !== null) {
+            $cache->save($sig, $filterMatches);
         }
         return $filterMatches;
     }
@@ -519,6 +538,26 @@ class Manager
     public function getThreshold()
     {
         return $this->threshold;
+    }
+
+    /**
+     * Set the cache object
+     * 
+     * @param ExposeCache $cache Cache instance
+     */
+    public function setCache(\Expose\Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * Get the current cache instance
+     * 
+     * @return mixed Either a \Expose\Cache instance or null
+     */
+    public function getCache()
+    {
+        return $this->cache;
     }
 
     /**
