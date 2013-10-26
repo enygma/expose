@@ -196,7 +196,7 @@ class Manager
                     continue;
                 }
 
-                foreach ($this->getFilters() as $index => $filter) {
+                foreach ($this->getFilters() as $filter_index => $filter) {
                     if ($filter->execute($value) === true) {
                         $this->getLogger()->info(
                             'Match found on Filter ID '.$filter->getId(),
