@@ -14,7 +14,7 @@ class Text extends \Expose\Export
             $line .= 'Variable: '.$report->getVarName();
             $line .= ' | Value: '.$report->getVarValue();
             $line .= "\n########################\n";
-            //$line .= "Filter Matches:\n";
+
             foreach ($report->getFilterMatch() as $filter) {
                 $line .= "Description: (".$filter->getId().") ".$filter->getDescription()."\n";
                 $line .= "Impact: ".$filter->getImpact();
@@ -25,5 +25,5 @@ class Text extends \Expose\Export
         }
 
         return implode("\n", $lines);
-    }   
+    }
 }
