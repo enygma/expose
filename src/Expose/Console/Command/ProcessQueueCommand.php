@@ -165,7 +165,7 @@ class ProcessQueueCommand extends Command
      * @param OutputInterface $output Reference to output instance
      * @return array Updated reports set
      */
-    protected function processQueue(&$output)
+    protected function processQueue(OutputInterface &$output)
     {
         $manager = $this->getManager();
         $queue = $this->getQueue();
