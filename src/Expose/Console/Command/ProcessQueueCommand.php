@@ -206,6 +206,7 @@ class ProcessQueueCommand extends Command
             return false;
         }
         list($full, $username, $password, $host) = $connect;
+        unset($full);
 
         switch(strtolower($queueType)) {
             case 'mongo':
