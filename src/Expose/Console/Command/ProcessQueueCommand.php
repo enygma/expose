@@ -26,9 +26,9 @@ class ProcessQueueCommand extends Command
         $this->setName('process-queue')
             ->setDescription('Process the outstanding items in the current queue')
             ->setDefinition(array(
-                new InputOption('list', 'list', InputOption::VALUE_NONE, 
+                new InputOption('list', 'list', InputOption::VALUE_NONE,
                     'List the current items in the queue'),
-                new InputOption('export-file', 'export-file', InputOption::VALUE_NONE, 
+                new InputOption('export-file', 'export-file', InputOption::VALUE_NONE,
                     'The file path to write out results to'),
                 new InputOption('queue-type', 'queue-type', InputOption::VALUE_NONE,
                     'Queue type (Ex. "mysql" or "mongo"'),
@@ -44,7 +44,7 @@ class ProcessQueueCommand extends Command
 
     /**
      * Get the Manager instance (or make a new one)
-     * 
+     *
      * @return \Expose\Manager instance
      */
     protected function getManager()
@@ -63,7 +63,7 @@ class ProcessQueueCommand extends Command
 
     /**
      * Get the Queue instance (or make a new one)
-     * 
+     *
      * @return \Expose\Queue instance
      */
     protected function getQueue()
@@ -79,7 +79,7 @@ class ProcessQueueCommand extends Command
 
     /**
      * Set the queue object for the current execution
-     * 
+     *
      * @param \Expose\Queue $queue instance
      */
     protected function setQueue($queue)
@@ -89,7 +89,7 @@ class ProcessQueueCommand extends Command
 
     /**
      * Execute the process-queue command
-     * 
+     *
      * @param  InputInterface  $input  Input object
      * @param  OutputInterface $output Output object
      * @return null
@@ -124,7 +124,7 @@ class ProcessQueueCommand extends Command
             $adapter = $this->buildAdapter($queueType, $queueConnect, $queue->getDatabase());
             if ($adapter === false) {
                 $output->writeln('<error>Invalid connection string</error>');
-                return;   
+                return;
             }
             $queue->setAdapter($adapter);
 
@@ -150,7 +150,7 @@ class ProcessQueueCommand extends Command
         if ($exportFile !== false) {
             $output->writeln('<info>Outputting results to file '.$exportFile.'</info>');
             file_put_contents(
-                $exportFile, 
+                $exportFile,
                 '['.date('m.d.Y H:i:s').'] '.json_encode($reports),
                 FILE_APPEND
             );
@@ -161,7 +161,7 @@ class ProcessQueueCommand extends Command
 
     /**
      * Run the queue processing
-     * 
+     *
      * @param OutputInterface $output Reference to output instance
      * @return array Updated reports set
      */
@@ -193,7 +193,7 @@ class ProcessQueueCommand extends Command
 
     /**
      * Build an adapter based on the type+connection string
-     * 
+     *
      * @param string $queueType Queue type (Ex. "mongo" or "mysql")
      * @param string $queueConnect Queue connection string (format: user:pass@host)
      * @param string $databaseName Database name
@@ -219,7 +219,7 @@ class ProcessQueueCommand extends Command
                 if (!extension_loaded('mysqli')) {
                     return false;
                 }
-                $adapter = new mysqli($host, $username, $password, $databaseName);
+                $adapter = new \mysqli($host, $username, $password, $databaseName);
                 break;
         }
 
