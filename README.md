@@ -58,3 +58,7 @@ on the OWASP site.
 Feel free to contact me with questions or how you can help the project!
 
 @author Chris Cornutt <ccornutt@phpdeveloper.org>
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/enygma/expose/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
