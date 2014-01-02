@@ -33,7 +33,10 @@ $data = array(
 $filters = new \Expose\FilterCollection();
 $filters->load();
 
-$manager = new \Expose\Manager($filters);
+//instantiate a PSR-3 compatible logger
+$logger = new \Expose\Log\Mongo();
+
+$manager = new \Expose\Manager($filters, $logger);
 $manager->run($data);
 
 echo 'impact: '.$manager->getImpact()."\n"; // should return 8
