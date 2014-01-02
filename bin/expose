@@ -14,4 +14,3 @@ $app->addCommands(array(
     new \Expose\Console\Command\ProcessQueueCommand()
 ));
 $app->run();
-?>

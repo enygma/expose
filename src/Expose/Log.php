@@ -2,7 +2,9 @@
 
 namespace Expose;
 
-abstract class Log
+use Psr\Log\LoggerInterface;
+
+abstract class Log implements LoggerInterface
 {
 	protected $logger = null;
 
