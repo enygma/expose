@@ -83,7 +83,7 @@ class Manager
      */
     public function __construct(
         \Expose\FilterCollection $filters, 
-        \Expose\Log $logger = null,
+        \Psr\Log\LoggerInterface $logger = null,
         \Expose\Queue $queue = null
     )
     {
