@@ -13,7 +13,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the variable name
-     * 
+     *
      * @covers \Expose\Report::getVarName
      * @covers \Expose\Report::setVarName
      */
@@ -29,7 +29,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the variable value
-     * 
+     *
      * @covers \Expose\Report::setVarValue
      * @covers \Expose\Report::getVarValue
      */
@@ -44,8 +44,24 @@ class ReportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the getter/setter for the variable path
+     *
+     * @covers \Expose\Report::setVarPath
+     * @covers \Expose\Report::getVarPath
+     */
+    public function testGetSetVariablePath()
+    {
+        $value = 'value1';
+        $this->report->setVarPath($value);
+        $this->assertEquals(
+            $this->report->getVarPath(),
+            $value
+        );
+    }
+
+    /**
      * Test the getter/setter for working with filter matches
-     * 
+     *
      * @covers \Expose\Report::addFilterMatch
      * @covers \Expose\Report::getfilterMatch
      */
@@ -61,7 +77,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Convert the object into an array
-     * 
+     *
      * @covers \Expose\Report::toArray
      */
     public function testObjectToArray()
@@ -78,7 +94,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the "expansion" of filters (converting them to arrays too)
-     * 
+     *
      * @covers \Expose\Report::toArray
      */
     public function testObjectToArrayExpandFilters()
