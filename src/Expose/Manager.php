@@ -78,11 +78,11 @@ class Manager
 
     /**
      * Init the object and assign the filters
-     * 
+     *
      * @param \Expose\FilterCollection $filters Set of filters
      */
     public function __construct(
-        \Expose\FilterCollection $filters, 
+        \Expose\FilterCollection $filters,
         \Psr\Log\LoggerInterface $logger = null,
         \Expose\Queue $queue = null
     )
@@ -99,7 +99,7 @@ class Manager
 
     /**
      * Run the filters against the given data
-     * 
+     *
      * @param array $data Data to run filters against
      */
     public function run(array $data, $queueRequests = false, $notify = false)
@@ -113,10 +113,10 @@ class Manager
 
         $this->setData($data);
         $data = $this->getData();
-        $impact = $this->impact;
 
         $path = array();
         $filterMatches = $this->runFilters($data, $path);
+        $impact = $this->impact;
 
         // Check our threshold to see if we even need to send
         $threshold = $this->getThreshold();
@@ -131,7 +131,7 @@ class Manager
 
     /**
      * Send the notification of the matching filters
-     * 
+     *
      * @param array $filterMatches Set of matching filter results
      * @return boolean Success/fail of notification send
      */
@@ -145,7 +145,7 @@ class Manager
 
     /**
      * Run through the filters on the given data
-     * 
+     *
      * @param array $data Data to check
      * @param array $path Current "path" in the data
      * @param integer $lvl Current nesting level
@@ -184,7 +184,7 @@ class Manager
                     $this->runFilters($value, $path, $l)
                 );
             } else {
-                
+
                 $p = implode('.', $path);
 
                 // See if we have restrictions & if the path matches
@@ -222,7 +222,7 @@ class Manager
 
     /**
      * If enabled, send the notification of the test run
-     * 
+     *
      * @param array $filterMatches Set of matches against filters
      * @throws \InvalidArgumentException If notify type is inavlid
      */
@@ -239,7 +239,7 @@ class Manager
 
     /**
      * Log the request information
-     * 
+     *
      * @param array $requestData Request data
      */
     public function logRequest($requestData)
@@ -251,7 +251,7 @@ class Manager
     /**
      * Get the current queue object
      *     If none is set, throws an exception, we need it!
-     * 
+     *
      * @return object Queue instance
      */
     public function getQueue()
@@ -265,7 +265,7 @@ class Manager
     /**
      * Set the current queue object
      *     Extends \Expose\Queue
-     * 
+     *
      * @param object $queue Queue instance
      */
     public function setQueue($queue)
@@ -275,7 +275,7 @@ class Manager
 
     /**
      * Set the notification method for the results
-     * 
+     *
      * @param \Expose\Notify $notify Notification object
      */
     public function setNotify($notify)
@@ -285,7 +285,7 @@ class Manager
 
     /**
      * Get the notification method for the results
-     * 
+     *
      * @return \Expose\Notify instance
      */
     public function getNotify()
@@ -295,7 +295,7 @@ class Manager
 
     /**
      * Get the current set of reports
-     * 
+     *
      * @return array Set of \Expose\Reports
      */
     public function getReports()
@@ -305,7 +305,7 @@ class Manager
 
     /**
      * Get the current overall impact score
-     * 
+     *
      * @return integer Impact score
      */
     public function getImpact()
@@ -315,7 +315,7 @@ class Manager
 
     /**
      * Set the overall impact value of the execution
-     * 
+     *
      * @param integer $impact Impact value
      */
     public function setImpact($impact)
@@ -325,7 +325,7 @@ class Manager
 
     /**
      * Set the source data for the execution
-     * 
+     *
      * @param array $data Data to validate
      */
     public function setData(array $data)
@@ -335,7 +335,7 @@ class Manager
 
     /**
      * Get the current source data
-     * 
+     *
      * @return array Source data
      */
     public function getData()
@@ -345,7 +345,7 @@ class Manager
 
     /**
      * Set the filters for the current validation
-     * 
+     *
      * @param \Expose\FilterCollection $filters Filter collection
      */
     public function setFilters(\Expose\FilterCollection $filters)
@@ -355,7 +355,7 @@ class Manager
 
     /**
      * Get the current set of filters
-     * 
+     *
      * @return \Expose\FilterCollection Filter collection
      */
     public function getFilters()
@@ -365,7 +365,7 @@ class Manager
 
     /**
      * Add a variable name for an exception
-     * 
+     *
      * @param string $varName Variable name
      */
     public function setException($path)
@@ -376,7 +376,7 @@ class Manager
 
     /**
      * Get a list of all exceptions
-     * 
+     *
      * @return array Exception list
      */
     public function getExceptions()
@@ -386,7 +386,7 @@ class Manager
 
     /**
      * Add a path to restrict the checking to
-     * 
+     *
      * @param string|array $path Path(s) to add to the restrictions
      */
     public function setRestriction($path)
@@ -397,7 +397,7 @@ class Manager
 
     /**
      * Get the list of all current restrictions
-     * 
+     *
      * @return array Set of restrictions
      */
     public function getRestrictions()
@@ -444,7 +444,7 @@ class Manager
     /**
      * Test to see if a variable is an exception
      *     Checks can be exceptions, so we preg_match it
-     * 
+     *
      * @param string $path Variable "path" (Ex. "POST.foo.bar")
      * @return boolean Found/not found
      */
@@ -464,7 +464,7 @@ class Manager
 
     /**
      * Set the current instance's logger object
-     * 
+     *
      * @param object $logger PSR-3 compatible Logger instance
      */
     public function setLogger($logger)
@@ -475,7 +475,7 @@ class Manager
     /**
      * Get the current logger instance
      *     If it's not set, throw an exception - we need it!
-     * 
+     *
      * @return object PSR-3 compatible logger object
      */
     public function getLogger()
@@ -488,7 +488,7 @@ class Manager
 
     /**
      * Set the configuration for the object
-     * 
+     *
      * @param array|string $config Either an array of config settings
      *     or the path to the config file
      * @throws \InvalidArgumentException If config file doesn't exist
@@ -512,7 +512,7 @@ class Manager
 
     /**
      * Get the configuration object/settings
-     * 
+     *
      * @return \Expose\Config object
      */
     public function getConfig()
@@ -532,7 +532,7 @@ class Manager
 
     /**
      * Get the current threshold value
-     * 
+     *
      * @return integer Threshold value (numeric)
      */
     public function getThreshold()
@@ -542,7 +542,7 @@ class Manager
 
     /**
      * Set the cache object
-     * 
+     *
      * @param ExposeCache $cache Cache instance
      */
     public function setCache(\Expose\Cache $cache)
@@ -552,7 +552,7 @@ class Manager
 
     /**
      * Get the current cache instance
-     * 
+     *
      * @return mixed Either a \Expose\Cache instance or null
      */
     public function getCache()
@@ -562,7 +562,7 @@ class Manager
 
     /**
      * Expose the current set of reports in the given format
-     * 
+     *
      * @param string $format Fromat for the export
      * @return mixed Report output (or null if the export type isn't found)
      */
