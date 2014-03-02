@@ -204,7 +204,7 @@ class Manager
                         );
                         $filterMatches[] = $filter;
 
-                        $report = new \Expose\Report($index, $value);
+                        $report = new \Expose\Report($index, $value, $path);
                         $report->addFilterMatch($filter);
                         $this->reports[] = $report;
 

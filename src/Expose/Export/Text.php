@@ -13,6 +13,7 @@ class Text extends \Expose\Export
             $line = '';
             $line .= 'Variable: '.$report->getVarName();
             $line .= ' | Value: '.$report->getVarValue();
+            $line .= ' | Path: '.json_encode($report->getVarPath());
             $line .= "\n########################\n";
 
             foreach ($report->getFilterMatch() as $filter) {
