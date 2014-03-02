@@ -62,18 +62,18 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
 
     public function load($path = null)
     {
-        $loadFile = $this->filterPath;
+        $loadFile = __DIR__.'/'.$this->filterPath;
         if ($path !== null && is_file($path)) {
             $loadFile = $path;
         }
-        
-        $data = json_decode(file_get_contents(__DIR__.'/'.$loadFile));
+
+        $data = json_decode(file_get_contents($loadFile));
         $this->setFilterData($data->filters);
     }
 
     /**
      * Set the current filter data
-     * 
+     *
      * @param array $data Filter data
      */
     public function setFilterData($data)
@@ -89,7 +89,7 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
 
     /**
      * Return all current filter data (or one specific filter)
-     * 
+     *
      * @param integer $filterId Filter ID #
      * @return mixed Either array of all filters or object of single filter
      */
@@ -106,7 +106,7 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
             return $this->filterData;
         }
     }
-    
+
     /**
      * @param string $path Location of json filter set
      */
@@ -117,7 +117,7 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
 
     /**
      * Add a new Filter object to the set
-     * 
+     *
      * @param \Expose\Filter $filter Filter object
      */
     public function addFilter(\Expose\Filter $filter)
