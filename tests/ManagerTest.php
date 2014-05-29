@@ -112,6 +112,35 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test a successful (found) execution of the filters
+     *
+     * @covers \Expose\Manager::run
+     * @covers \Expose\Manager::getImpact
+     * @covers \Expose\Manager::getReports
+     */
+    public function testRunSuccessWithImpactLimit()
+    {
+        $data = array(
+            'POST' => array(
+                'foo' => 'testmatch1',
+                'bar' => 'testmatch1'
+            )
+        );
+
+        $filterCollection = new \Expose\FilterCollection();
+        $filterCollection->setFilterData($this->sampleFilters);
+
+        $logger = new MockLogger();
+        $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager->setImpactLimit(1);
+        $manager->setConfig(array('test' => 'foo'));
+        $manager->run($data, false, false);
+
+        $this->assertEquals($manager->getImpact(), 2);
+        $this->assertEquals(count($manager->getReports()), 1);
+    }
+
+    /**
      * Test the use of the "export" method
      *     Loopback just returns the data back, no formatting
      * 

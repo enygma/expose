@@ -23,6 +23,12 @@ class Manager
     private $impact = 0;
 
     /**
+     * If set, stop running filters when reached
+     * @var integer
+     */
+    private $impactLimit = 0;
+
+    /**
      * Report results from the filter execution
      * @var array
      */
@@ -78,7 +84,7 @@ class Manager
 
     /**
      * Init the object and assign the filters
-     * 
+     *
      * @param \Expose\FilterCollection $filters Set of filters
      */
     public function __construct(
@@ -165,10 +171,17 @@ class Manager
             }
         }
 
-        foreach ($data as $index => $value) {
+        $data = new \ArrayIterator($data);
+        $data->rewind();
+        while($data->valid() && !$this->impactLimitReached()) {
+            $index = $data->key();
+            $value = $data->current();
+            $data->next();
+
             if (count($path) > $lvl) {
                 $path = array_slice($path, 0, $lvl);
             }
+
             $path[] = $index;
 
             // see if it's an exception
@@ -183,41 +196,87 @@ class Manager
                     $filterMatches,
                     $this->runFilters($value, $path, $l)
                 );
-            } else {
-                
-                $p = implode('.', $path);
 
-                // See if we have restrictions & if the path matches
-                if (!empty($restrictions) && !in_array($p, $restrictions)) {
-                    $this->getLogger()->info(
-                        'Restrictions enabled, no match on path '.implode('.', $path),
-                        array('restrictions' => $restrictions)
-                    );
-                    continue;
-                }
-
-                foreach ($this->getFilters() as $filter_index => $filter) {
-                    if ($filter->execute($value) === true) {
-                        $this->getLogger()->info(
-                            'Match found on Filter ID '.$filter->getId(),
-                            array($filter->toArray())
-                        );
-                        $filterMatches[] = $filter;
-
-                        $report = new \Expose\Report($index, $value, $path);
-                        $report->addFilterMatch($filter);
-                        $this->reports[] = $report;
-
-                        $this->impact += $filter->getImpact();
-                    }
-                }
+                continue;
             }
+                
+            $p = implode('.', $path);
+
+            // See if we have restrictions & if the path matches
+            if (!empty($restrictions) && !in_array($p, $restrictions)) {
+                $this->getLogger()->info(
+                    'Restrictions enabled, no match on path '.implode('.', $path),
+                    array('restrictions' => $restrictions)
+                );
+                continue;
+            }
+
+            $this->processFilters($value, $index, $path);
         }
 
         if ($cache !== null) {
             $cache->save($sig, $filterMatches);
         }
         return $filterMatches;
+    }
+
+    /**
+     * Runs value through all filters
+     * @param $value
+     * @param $index
+     * @param $path
+     */
+    protected function processFilters($value, $index, $path)
+    {
+        $filters = $this->getFilters();
+        $filters->rewind();
+        while($filters->valid() && !$this->impactLimitReached()) {
+            $filter = $filters->current();
+            $filters->next();
+            if ($filter->execute($value) == true) {
+                $this->getLogger()->info(
+                    'Match found on Filter ID '.$filter->getId(),
+                    array($filter->toArray())
+                );
+                $filterMatches[] = $filter;
+
+                $report = new \Expose\Report($index, $value, $path);
+                $report->addFilterMatch($filter);
+                $this->reports[] = $report;
+
+                $this->impact += $filter->getImpact();
+            }
+        }
+    }
+
+    /**
+     * Tests if the impact limit has been reached
+     *
+     * @return bool
+     */
+    protected function impactLimitReached()
+    {
+        if ($this->impactLimit < 1) {
+            return false;
+        }
+
+        $reached = $this->impact >= $this->impactLimit;
+        if ($reached) {
+            $this->getLogger()->info(
+                'Reached Impact limit'
+            );
+        }
+        return $reached;
+    }
+
+    /**
+     * Sets the impact limit
+     *
+     * @param $value
+     */
+    public function setImpactLimit($value)
+    {
+        $this->impactLimit = (int) $value;
     }
 
     /**
