@@ -36,7 +36,7 @@ class Filter
 
     /**
      * Init the filter and set the data if given
-     * 
+     *
      * @param array $data Filter data [optional]
      */
     public function __construct(array $data = null)
@@ -48,7 +48,7 @@ class Filter
 
     /**
      * Load the data into the filter object
-     * 
+     *
      * @param array $data Filter data
      */
     public function load($data)
@@ -68,7 +68,7 @@ class Filter
 
     /**
      * Get the current filter's impact
-     * 
+     *
      * @return integer Impact level
      */
     public function getImpact()
@@ -78,7 +78,7 @@ class Filter
 
     /**
      * Set the impact level of the filter
-     * 
+     *
      * @param integer $impact Impact rating (Ex. "8" or "3")
      * @return \Expose\Filter instance
      */
@@ -90,7 +90,7 @@ class Filter
 
     /**
      * Get the current list of tags for the filter
-     * 
+     *
      * @return array Set of tags
      */
     public function getTags()
@@ -100,7 +100,7 @@ class Filter
 
     /**
      * Set the tags that match on the filter
-     * 
+     *
      * @param array $tags Tag set
      * @return \Expose\Filter instance
      */
@@ -117,7 +117,7 @@ class Filter
 
     /**
      * Set the current Filter's description
-     * 
+     *
      * @param string $desc Description of filter
      * @return \Expose\Filter instance
      */
@@ -129,7 +129,7 @@ class Filter
 
     /**
      * Get the current filter's ID
-     * 
+     *
      * @return integer Filter ID
      */
     public function getId()
@@ -139,7 +139,7 @@ class Filter
 
     /**
      * Set the current filter's ID
-     * 
+     *
      * @param integer $id Filter ID
      * @return \Expose\Filter instance
      */
@@ -151,7 +151,7 @@ class Filter
 
     /**
      * Get the current Rule value
-     * 
+     *
      * @return string Regex rule
      */
     public function getRule()
@@ -161,7 +161,7 @@ class Filter
 
     /**
      * Set the current regex match rule
-     * 
+     *
      * @param string $rule Regex match string
      * @return \Expose\Filter instance
      */
@@ -174,18 +174,18 @@ class Filter
     /**
      * Execute the filter
      *     By default, this runs the regex on the filter against the data
-     * 
+     *
      * @param string $data Incoming data
      * @return boolean Pass/fail of filter
      */
     public function execute($data)
     {
-        return (preg_match('/'.$this->rule.'/', $data) === 1) ? true : false;
+        return (preg_match('/'.$this->rule.'/im', $data) === 1) ? true : false;
     }
 
     /**
      * Return the current Filter's data as an array
-     * 
+     *
      * @return array Filter data
      */
     public function toArray()
