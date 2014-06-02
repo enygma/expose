@@ -39,9 +39,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that the getter and setter for assigning filters 
+     * Test that the getter and setter for assigning filters
      *     works correctly
-     * 
+     *
      * @covers \Expose\Manager::getFilters
      * @covers \Expose\Manager::setFilters
      */
@@ -60,7 +60,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test hte getter/setter for assigning data
-     * 
+     *
      * @covers \Expose\Manager::getData
      * @covers \Expose\Manager::setData
      */
@@ -77,7 +77,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the overall impact value
-     * 
+     *
      * @covers \Expose\Manager::getImpact
      * @covers \Expose\Manager::setImpact
      */
@@ -93,7 +93,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test a successful (found) execution of the filters
-     * 
+     *
      * @covers \Expose\Manager::run
      * @covers \Expose\Manager::getImpact
      * @covers \Expose\Manager::getReports
@@ -143,7 +143,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test the use of the "export" method
      *     Loopback just returns the data back, no formatting
-     * 
+     *
      * @covers \Expose\Manager::run
      * @covers \Expose\Manager::export
      */
@@ -165,7 +165,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the null response when the export type isn't found
-     * 
+     *
      * @covers \Expose\Manager::export
      */
     public function testRunExportNotFound()
@@ -183,7 +183,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for exceptions to processing
-     * 
+     *
      * @covers \Expose\Manager::setException
      * @covers \Expose\Manager::isException
      * @covers \Expose\Manager::getExceptions
@@ -199,7 +199,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for restrictions
-     * 
+     *
      * @covers \Expose\Manager::setRestriction
      * @covers \Expose\Manager::getRestrictions
      */
@@ -215,7 +215,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the log resource/table
-     * 
+     *
      * @covers \Expose\Manager::setLogResource
      * @covers \Expose\Manager::getLogResource
      */
@@ -231,7 +231,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the log database option
-     * 
+     *
      * @covers \Expose\Manager::setLogDatabase
      * @covers \Expose\Manager::getLogDatabase
      */
@@ -247,7 +247,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the setup of the config based on an array (not a file)
-     * 
+     *
      * @covers \Expose\Manager::setConfig
      * @covers \Expose\Manager::getConfig
      * @covers \Expose\Config::toArray
@@ -267,7 +267,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that a field marked as an exception is ignored
-     * 
+     *
      * @covers \Expose\Manager::setException
      * @covers \Expose\Manager::run
      */
@@ -289,7 +289,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                     'baz' => 'testmatch2'
                 )
             )
-        );        
+        );
 
         $manager->run($data);
         $this->assertEquals($manager->getImpact(), 0);
@@ -297,7 +297,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that a field marked as an exception based on a regex wildcard is ignored
-     * 
+     *
      * @covers \Expose\Manager::setException
      * @covers \Expose\Manager::run
      */
@@ -315,7 +315,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'POST' => array(
                 'foo1234' => 'testmatch1'
             )
-        );        
+        );
 
         $manager->run($data);
         $this->assertEquals($manager->getImpact(), 0);
@@ -323,14 +323,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the Queue object
-     * 
+     *
      * @covers \Expose\Manager::setQueue
      * @covers \Expose\Manager::getQueue
      */
     public function testGetSetQueue()
     {
         $queue = new \Expose\Queue\MockQueue();
-        
+
         $this->manager->setQueue($queue);
         $this->assertEquals(
             $this->manager->getQueue(),
@@ -341,7 +341,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Getting the default queue object without setting it
      *     first gives us an exception
-     * 
+     *
      * @covers \Expose\Manager::getQueue
      * @expectedException \Expose\Exception\QueueNotDefined
      */
@@ -352,7 +352,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the notification method
-     * 
+     *
      * @covers \Expose\Manager::getNotify
      * @covers \Expose\Manager::setNotify
      */
@@ -367,4 +367,44 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testThresholdLowerThenImpact() {
+
+        $filter = new \Expose\Filter();
+        $filter->setImpact(100);
+
+        $collection   = new \Expose\FilterCollection();
+        $collection->addFilter($filter);
+
+        $manager_mock = $this->getMockBuilder('\\Expose\\Manager')
+            ->setConstructorArgs(array($collection, new \Expose\MockLogger()))
+            ->setMethods(array('sendNotification'))
+            ->getMock();
+
+        $manager_mock
+           ->expects($this->once())
+           ->method('sendNotification');
+
+        $manager_mock->setThreshold(7);
+        $manager_mock->run(array('test' => 'test'), false, true);
+    }
+
+    public function testThresholdHigherThenImpact() {
+        $filter = new \Expose\Filter();
+        $filter->setImpact(5);
+
+        $collection   = new \Expose\FilterCollection();
+        $collection->addFilter($filter);
+
+        $manager_mock = $this->getMockBuilder('\\Expose\\Manager')
+            ->setConstructorArgs(array($collection, new \Expose\MockLogger()))
+            ->setMethods(array('sendNotification'))
+            ->getMock();
+
+        $manager_mock
+            ->expects($this->never())
+            ->method('sendNotification');
+
+        $manager_mock->setThreshold(100);
+        $manager_mock->run(array('test' => 'test'), false, true);
+    }
 }

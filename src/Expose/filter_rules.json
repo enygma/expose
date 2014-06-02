@@ -916,6 +916,17 @@
           ]
         },
         "impact":"3"
+      },
+      {
+        "id":"78",
+        "rule":"(?:%23.*?%0A)",
+        "description":"Detects SQL comment filter evasion",
+        "tags":{
+          "tag":[
+            "format string"
+          ]
+        },
+        "impact":"10"
       }
     ]
 }
