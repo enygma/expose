@@ -127,9 +127,9 @@ class Manager
         // Check our threshold to see if we even need to send
         $threshold = $this->getThreshold();
 
-        if ($threshold !== null && $impact >= $threshold && $notify == true) {
+        if ($threshold !== null && $impact >= $threshold && $notify === true) {
             return $this->sendNotification($filterMatches);
-        } else if ($threshold === null && $notify == true) {
+        } else if ($threshold === null && $notify === true) {
             return $this->sendNotification($filterMatches);
         }
         return true;
@@ -198,7 +198,7 @@ class Manager
                 );
                 continue;
             }
-                
+
             $p = implode('.', $path);
 
             // See if we have restrictions & if the path matches
@@ -232,12 +232,11 @@ class Manager
         while($filters->valid() && !$this->impactLimitReached()) {
             $filter = $filters->current();
             $filters->next();
-            if ($filter->execute($value) == true) {
+            if ($filter->execute($value) === true) {
                 $this->getLogger()->info(
                     'Match found on Filter ID '.$filter->getId(),
                     array($filter->toArray())
                 );
-                $filterMatches[] = $filter;
 
                 $report = new \Expose\Report($index, $value, $path);
                 $report->addFilterMatch($filter);
