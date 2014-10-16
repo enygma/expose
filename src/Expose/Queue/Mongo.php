@@ -18,7 +18,7 @@ class Mongo extends \Expose\Queue
 
     /**
      * Return a default MongoClient instance
-     * 
+     *
      * @return \MongoClient object
      */
     public function getAdapter()
@@ -31,7 +31,7 @@ class Mongo extends \Expose\Queue
 
     /**
      * Get the current database name
-     * 
+     *
      * @return string Database name
      */
     public function getDatabase()
@@ -41,7 +41,7 @@ class Mongo extends \Expose\Queue
 
     /**
      * Get the queue collection
-     * 
+     *
      * @return \MongoCollection Collection instance
      */
     public function getCollection()
@@ -55,14 +55,14 @@ class Mongo extends \Expose\Queue
 
     /**
      * Add a new record to the queue
-     * 
+     *
      * @param array $requestData Request data
      */
     public function add($requestData)
     {
         $data = array(
             'data' => $requestData,
-            'remote_ip' => (isset($_SERVER['REMOTE_ADDR'])) 
+            'remote_ip' => (isset($_SERVER['REMOTE_ADDR']))
                 ? $_SERVER['REMOTE_ADDR'] : 0,
             'datetime' => time(),
             'processed' => false
@@ -73,7 +73,7 @@ class Mongo extends \Expose\Queue
 
     /**
      * Mark a record as processed
-     * 
+     *
      * @param integer $id Record ID
      * @return boolean Success/fail of update
      */
@@ -87,7 +87,7 @@ class Mongo extends \Expose\Queue
 
     /**
      * Get the current list of pending records
-     * 
+     *
      * @return array Record results
      */
     public function getPending($limit = 10)

@@ -12,7 +12,7 @@ abstract class Queue
 
     /**
      * Init the queue and set the adapter if given
-     * 
+     *
      * @param object $adapter Connection adapter
      */
     public function __construct($adapter = null)
@@ -24,7 +24,7 @@ abstract class Queue
 
     /**
      * Set the connection adapter for the request
-     * 
+     *
      * @param object $adapter Connection adapter
      */
     public function setAdapter($adapter)
@@ -34,7 +34,7 @@ abstract class Queue
 
     /**
      * Return the current connection adapter
-     * 
+     *
      * @return object Connection adapter
      */
     public function getAdapter()
@@ -44,7 +44,7 @@ abstract class Queue
 
     /**
      * Get the current list of pending requests in the queue
-     * 
+     *
      * @param integer $limit Limit number of returned values
      * @return array Set of pending requests
      */
@@ -52,14 +52,14 @@ abstract class Queue
 
     /**
      * Add a new record to the queue
-     * 
+     *
      * @param array $data Request data
      */
     public abstract function add($data);
 
     /**
      * Mark the record processed (identified by ID)
-     * 
+     *
      * @param string $id Unique ID for record
      * @return boolean Success/fail of update
      */

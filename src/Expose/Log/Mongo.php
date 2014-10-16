@@ -24,7 +24,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Init the object and set the connection string if given
-     * 
+     *
      * @param string $connectString Mongo connection string
      */
     public function __construct($connectString = null)
@@ -36,7 +36,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Get the current database name
-     * 
+     *
      * @return string DB name
      */
     public function getDbName()
@@ -46,7 +46,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Set the current database name
-     * 
+     *
      * @param string $name DB name
      */
     public function setDbName($name)
@@ -56,7 +56,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Get the current DB collection name
-     * 
+     *
      * @return string Collection name
      */
     public function getDbCollection()
@@ -66,7 +66,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Set the current DB collection name
-     * 
+     *
      * @param string $collection Collection name
      */
     public function setDbCollection($collection)
@@ -76,7 +76,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Set the current connection string
-     * 
+     *
      * @param string $string Connection string
      */
     public function setConnectString($string)
@@ -86,7 +86,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Get the current connection string
-     * 
+     *
      * @return string Connection string
      */
     public function getConnectString()
@@ -96,7 +96,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log emergency messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -108,7 +108,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log alert messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -120,7 +120,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log critical messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -132,7 +132,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log error messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -144,7 +144,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log warning messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -156,7 +156,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log notice messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -168,7 +168,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log info messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -180,7 +180,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Log debug messages
-     * 
+     *
      * @param string $message Log message
      * @param array $context Extra contact information
      * @return boolean Log pass/fail
@@ -192,7 +192,7 @@ class Mongo extends \Expose\Log
 
     /**
      * Push the log message and context information into Mongo
-     * 
+     *
      * @param string $level Logging level (ex. info, debug, notice...)
      * @param string $message Log message
      * @param array $context Extra context information
