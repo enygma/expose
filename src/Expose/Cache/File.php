@@ -12,7 +12,7 @@ class File extends \Expose\Cache
 
 	/**
 	 * Save the cache data to a file
-	 * 
+	 *
 	 * @param string $key Identifier key (used in filename)
 	 * @param mixed $data Data to cache
 	 * @return boolean Success/fail of save
@@ -27,7 +27,7 @@ class File extends \Expose\Cache
 
 	/**
 	 * Get the record identified by the given key
-	 * 
+	 *
 	 * @param string $key Cache identifier key
 	 * @return mixed Returns either data or null if not found
 	 */
@@ -44,7 +44,7 @@ class File extends \Expose\Cache
 
 	/**
 	 * Set the path to save cache files into
-	 * 
+	 *
 	 * @param string $path File system path
 	 */
 	public function setPath($path)
@@ -57,7 +57,7 @@ class File extends \Expose\Cache
 
 	/**
 	 * Get the current cache file path
-	 * 
+	 *
 	 * @return string Hash directory path
 	 */
 	public function getPath()

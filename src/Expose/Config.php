@@ -12,7 +12,7 @@ class Config
 
     /**
      * Init the object and set data if given
-     * 
+     *
      * @param array $data Configuration data
      */
     public function __construct(array $data = null)
@@ -24,7 +24,7 @@ class Config
 
     /**
      * Load the data into the object
-     * 
+     *
      * @param array $data Configuration data
      */
     public function load(array $data)
@@ -36,7 +36,7 @@ class Config
 
     /**
      * Get the value from the config by "path"
-     * 
+     *
      * @param string $path Path to config option (Ex. "foo.bar.baz")
      * @return mixed Either the found value or null if not found
      */
@@ -62,7 +62,7 @@ class Config
 
     /**
      * Set the configuration option based on the "path"
-     * 
+     *
      * @param string $path Config "path" (Ex. "foo.bar.baz")
      * @param mixed $value Value of config
      */
@@ -90,7 +90,7 @@ class Config
 
     /**
      * Return the config options as just the array
-     * 
+     *
      * @return array Config options
      */
     public function toArray()
