@@ -1,0 +1,20 @@
+{
+    "name":"enygma/expose",
+    "type":"library",
+    "authors":[
+        {
+            "name":"Chris Cornutt",
+            "email":"ccornutt@phpdeveloper.org",
+            "homepage":"http://www.phpdeveloper.org/"
+        }
+    ],
+    "require":{
+        "php":">=5.3.1",
+        "monolog/monolog": "~1.4"
+    },
+    "extra": {
+        "installer-paths": {
+            "{$name}": ["vendor/package"]
+        }
+    }
+}
