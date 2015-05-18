@@ -14,7 +14,7 @@ class Manager
      * Set of filters to execute
      * @var \Expose\FilterCollection
      */
-    private $filters = null; 
+    private $filters = null;
 
     /**
      * Overall impact score of the filter execution
@@ -82,6 +82,8 @@ class Manager
      */
     private $cache = null;
 
+
+	
     /**
      * Init the object and assign the filters
      *
@@ -94,7 +96,6 @@ class Manager
     )
     {
         $this->setFilters($filters);
-
         if ($logger !== null) {
             $this->setLogger($logger);
         }
@@ -111,7 +112,7 @@ class Manager
     public function run(array $data, $queueRequests = false, $notify = false)
     {
         $this->getLogger()->info('Executing on data '.md5(print_r($data, true)));
-
+		
         if ($queueRequests === true) {
             $this->logRequest($data);
             return true;
@@ -126,15 +127,19 @@ class Manager
 
         // Check our threshold to see if we even need to send
         $threshold = $this->getThreshold();
-
+        
+        /**/
         if ($threshold !== null && $impact >= $threshold && $notify === true) {
             return $this->sendNotification($filterMatches);
         } else if ($threshold === null && $notify === true) {
             return $this->sendNotification($filterMatches);
         }
+        /**/
         return true;
     }
+	
 
+    
     /**
      * Send the notification of the matching filters
      *
@@ -161,18 +166,24 @@ class Manager
     {
         $filterMatches = array();
         $restrictions = $this->getRestrictions();
-        $sig = md5(print_r($data, true));
-
+		if (is_array($data))
+			$data = new \ArrayIterator($data);
+		$data->rewind();
+        //echo '<pre>' . print_r(array(__METHOD__, 'data', $data, $path, $lvl), true) . '</pre>';
+		$sig = md5(print_r($data, true));
         $cache = $this->getCache();
+		//echo '<pre>' . print_r(array(__METHOD__, 'cache', $cache), true) . '</pre>';
         if ($cache !== null) {
             $cacheData = $cache->get($sig);
-            if ($cacheData !== null) {
-                return $cacheData;
+            if (false !== $cacheData) {
+                //return $cacheData;
+				$this->reports = $cacheData['reports'];
+				$this->impact = $cacheData['impact'];
+				$this->getLogger()->info('Data retrieved from cache - '.$sig);
+				return $cacheData['filterMatches'];
             }
         }
-
-        $data = new \ArrayIterator($data);
-        $data->rewind();
+		//if (is_array($data)) $data = new \ArrayIterator($data);
         while($data->valid() && !$this->impactLimitReached()) {
             $index = $data->key();
             $value = $data->current();
@@ -181,7 +192,6 @@ class Manager
             if (count($path) > $lvl) {
                 $path = array_slice($path, 0, $lvl);
             }
-
             $path[] = $index;
 
             // see if it's an exception
@@ -192,13 +202,12 @@ class Manager
 
             if (is_array($value)) {
                 $l = $lvl+1;
-                $filterMatches = array_merge(
+                $filterMatches = @array_merge(
                     $filterMatches,
                     $this->runFilters($value, $path, $l)
                 );
                 continue;
             }
-
             $p = implode('.', $path);
 
             // See if we have restrictions & if the path matches
@@ -210,11 +219,21 @@ class Manager
                 continue;
             }
 
-            $this->processFilters($value, $index, $path);
+            $filterMatches = array_merge($filterMatches, $this->processFilters($value, $index, $path));
         }
-
+		
         if ($cache !== null) {
-            $cache->save($sig, $filterMatches);
+            //$cache->save($sig, $filterMatches);
+			/**
+			echo '<pre>';
+			var_dump(array('guardamos_en_cache', $data, $path, $lvl, md5($sig), $this->impact));
+			echo '</pre>';
+			/**/
+			$cache->save($sig, array (
+				'reports' => $this->reports,
+				'impact' => $this->impact,
+				'filterMatches' => $filterMatches
+			));
         }
         return $filterMatches;
     }
@@ -227,11 +246,18 @@ class Manager
      */
     protected function processFilters($value, $index, $path)
     {
+        // added by Jorge Hoya
+        $filtersMatched = array();
         $filters = $this->getFilters();
         $filters->rewind();
         while($filters->valid() && !$this->impactLimitReached()) {
             $filter = $filters->current();
             $filters->next();
+            
+			// added: to detect URL encoded parameters
+            //if ($this->useConverter)
+				//$value = urldecode($value);
+            
             if ($filter->execute($value) === true) {
                 $this->getLogger()->info(
                     'Match found on Filter ID '.$filter->getId(),
@@ -241,10 +267,13 @@ class Manager
                 $report = new \Expose\Report($index, $value, $path);
                 $report->addFilterMatch($filter);
                 $this->reports[] = $report;
-
                 $this->impact += $filter->getImpact();
+                // added
+                $filtersMatched[] = $filter;
             }
         }
+        // added
+        return $filtersMatched;
     }
 
     /**
@@ -612,7 +641,7 @@ class Manager
      *
      * @return mixed Either a \Expose\Cache instance or null
      */
-    public function getCache() 
+    public function getCache()
     {
         return $this->cache;
     }
@@ -632,4 +661,32 @@ class Manager
         }
         return null;
     }
+	
+    /**
+     * Get Filter's detection status from given Id
+     *
+     * @param int $id Filter's ID
+     * @return boolean
+     */
+	// added by Jorge Hoya
+	public function isIdDetected($id)
+	{
+		if ( empty($id) || (int)$id == 0)
+			return false;
+		$id = (int) $id;
+		if ( !empty($this->reports) ) {
+			foreach ( $this->reports as $report)
+			{
+				foreach ($report->getFilterMatch() as $filter) {
+					if ( (int) $filter->getId() == $id )
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+    
 }

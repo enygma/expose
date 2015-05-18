@@ -7,7 +7,13 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
     private $filterPath = 'filter_rules.json';
     private $filterData = array();
     private $index = 0;
+    private $cache;
 
+    public function __construct( \Expose\Cache $cache = null) {
+        if (!is_null($cache))
+            $this->setCache($cache);
+    }
+    
     public function rewind()
     {
         $this->index = 0;
@@ -62,12 +68,22 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
 
     public function load($path = null)
     {
-        $loadFile = __DIR__.'/'.$this->filterPath;
-        if ($path !== null && is_file($path)) {
-            $loadFile = $path;
+        $data = null;
+        $cache = $this->getCache();
+        if ( !is_null($cache)) {
+            $data = $cache->get('filters');
         }
 
-        $data = json_decode(file_get_contents($loadFile));
+        if (false === $data) { 
+            $loadFile = __DIR__.'/'.$this->filterPath;
+            if ($path !== null && is_file($path)) {
+                $loadFile = $path;
+            }
+            $data = json_decode(file_get_contents($loadFile));
+            if ( !is_null($cache))
+                $cache->save('filters', $data);
+        }
+        
         $this->setFilterData($data->filters);
     }
 
@@ -123,5 +139,25 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
     public function addFilter(\Expose\Filter $filter)
     {
         $this->filterData[] = $filter;
+    }
+
+     /**
+     * Set the cache object
+     *
+     * @param ExposeCache $cache Cache instance
+     */
+    public function setCache(\Expose\Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * Get the current cache instance
+     *
+     * @return mixed Either a \Expose\Cache instance or null
+     */
+    public function getCache()
+    {
+        return $this->cache;
     }
 }
