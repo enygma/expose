@@ -14,7 +14,7 @@ class Manager
      * Set of filters to execute
      * @var \Expose\FilterCollection
      */
-    private $filters = null;
+    private $filters = null; 
 
     /**
      * Overall impact score of the filter execution
