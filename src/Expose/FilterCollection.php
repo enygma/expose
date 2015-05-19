@@ -68,7 +68,7 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
 
     public function load($path = null)
     {
-        $data = null;
+        $data = false;
         $cache = $this->getCache();
         if ( !is_null($cache)) {
             $data = $cache->get('filters');

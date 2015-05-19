@@ -6,7 +6,6 @@ set_include_path(
    PATH_SEPARATOR . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'expose' . DIRECTORY_SEPARATOR . 
    PATH_SEPARATOR . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'expose' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR
 );
-var_dump(get_include_path());
 
 
 use Monolog\Logger;
@@ -109,7 +108,8 @@ function getVariableToDetect($key = 'request_order')
     return $out;
 }
 
-//exit;
+
+$time_start = microtime(true);
 
 //cache
 $cache = new Expose\Cache\File();
@@ -120,6 +120,7 @@ $filters = new \Expose\FilterCollection($cache);
 // without cache
 //$filters = new \Expose\FilterCollection();
 $filters->load();
+//var_dump($filters);
 
 // instantiate a PSR-3 compatible logger
 // $logger = new \Expose\Log\Mongo();
@@ -142,21 +143,24 @@ $notify->setFromAddress('notify@my-domain.com');
 $manager->setNotify($notify);
 */
 
-echo 'disable_functions = ' . ini_get('disable_functions');
-//exit;
+//echo 'disable_functions = ' . ini_get('disable_functions');
 
 $manager->run($data, false, false);
 
-echo '<h1>Expose: https://github.com/enygma/expose</h1>';
-echo 'Impact: '.$manager->getImpact()."\n"; // should return 8
+$time_end = microtime(true);
+$execution_time = ($time_end - $time_start) / 1;
+echo PHP_EOL . 'Total Execution Time: '.$execution_time.' microseconds' . PHP_EOL;
+
+
+echo 'Expose: https://github.com/enygma/expose' . PHP_EOL;
+echo 'Impact: '.$manager->getImpact(). PHP_EOL; // should return 8
 
 // get all matching filter reports
 $reports = $manager->getReports();
 // comprobamos si la regla de ../ ha saltado (regla 10)
-//echo '<br>Se han detectado intentos de ejecucion "basic directory traversal"?: ';
-//echo ( $manager->isIdDetected(10)) ? 'si' : 'no' . PHP_EOL;
+// echo '<br>Se han detectado intentos de ejecucion "basic directory traversal"?: ';
+// echo ( $manager->isIdDetected(10)) ? 'si' : 'no' . PHP_EOL;
 
 // export out the report in the given format ("text" is default)
-echo $manager->export('text');
-echo "\n\n";
+//echo $manager->export('text')  . PHP_EOL;
 ?>
