@@ -128,13 +128,13 @@ class Manager
         // Check our threshold to see if we even need to send
         $threshold = $this->getThreshold();
         
-        /**/
+
         if ($threshold !== null && $impact >= $threshold && $notify === true) {
             return $this->sendNotification($filterMatches);
         } else if ($threshold === null && $notify === true) {
             return $this->sendNotification($filterMatches);
         }
-        /**/
+
         return true;
     }
 	
@@ -169,21 +169,20 @@ class Manager
 		if (is_array($data))
 			$data = new \ArrayIterator($data);
 		$data->rewind();
-        //echo '<pre>' . print_r(array(__METHOD__, 'data', $data, $path, $lvl), true) . '</pre>';
+
 		$sig = md5(print_r($data, true));
         $cache = $this->getCache();
-		//echo '<pre>' . print_r(array(__METHOD__, 'cache', $cache), true) . '</pre>';
+
         if ($cache !== null) {
             $cacheData = $cache->get($sig);
             if (false !== $cacheData) {
-                //return $cacheData;
 				$this->reports = $cacheData['reports'];
 				$this->impact = $cacheData['impact'];
 				$this->getLogger()->info('Data retrieved from cache - '.$sig);
 				return $cacheData['filterMatches'];
             }
         }
-		//if (is_array($data)) $data = new \ArrayIterator($data);
+
         while($data->valid() && !$this->impactLimitReached()) {
             $index = $data->key();
             $value = $data->current();
@@ -223,12 +222,6 @@ class Manager
         }
 		
         if ($cache !== null) {
-            //$cache->save($sig, $filterMatches);
-			/**
-			echo '<pre>';
-			var_dump(array('guardamos_en_cache', $data, $path, $lvl, md5($sig), $this->impact));
-			echo '</pre>';
-			/**/
 			$cache->save($sig, array (
 				'reports' => $this->reports,
 				'impact' => $this->impact,
@@ -246,18 +239,14 @@ class Manager
      */
     protected function processFilters($value, $index, $path)
     {
-        // added by Jorge Hoya
+
         $filtersMatched = array();
         $filters = $this->getFilters();
         $filters->rewind();
         while($filters->valid() && !$this->impactLimitReached()) {
             $filter = $filters->current();
             $filters->next();
-            
-			// added: to detect URL encoded parameters
-            //if ($this->useConverter)
-				//$value = urldecode($value);
-            
+
             if ($filter->execute($value) === true) {
                 $this->getLogger()->info(
                     'Match found on Filter ID '.$filter->getId(),
@@ -268,11 +257,9 @@ class Manager
                 $report->addFilterMatch($filter);
                 $this->reports[] = $report;
                 $this->impact += $filter->getImpact();
-                // added
                 $filtersMatched[] = $filter;
             }
         }
-        // added
         return $filtersMatched;
     }
 
@@ -668,8 +655,7 @@ class Manager
      * @param int $id Filter's ID
      * @return boolean
      */
-	// added by Jorge Hoya
-	public function isIdDetected($id)
+	public function isFilterIdDetected($id)
 	{
 		if ( empty($id) || (int)$id == 0)
 			return false;

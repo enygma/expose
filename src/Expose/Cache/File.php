@@ -39,7 +39,6 @@ class File extends \Expose\Cache
 		if (!is_file($cacheFile)) {
 			return false;
 		}
-		//return unserialize(file_get_contents($cacheFile));
         $t = file_get_contents($cacheFile);
         return (false !== $t) ? unserialize($t) : false;
 	}
