@@ -31,13 +31,22 @@ $data = array(
     )
 );
 
-$filters = new \Expose\FilterCollection();
+//cache
+$cache = new Expose\Cache\File();
+$cache->setPath( "cache-folder-path");
+
+// with cache
+$filters = new \Expose\FilterCollection($cache);
+// without cache
+// $filters = new \Expose\FilterCollection();
 $filters->load();
 
 //instantiate a PSR-3 compatible logger
 $logger = new \Expose\Log\Mongo();
 
 $manager = new \Expose\Manager($filters, $logger);
+// with cache
+$manager->setCache($cache);
 $manager->run($data);
 
 echo 'impact: '.$manager->getImpact()."\n"; // should return 8
