@@ -2,6 +2,10 @@
 
 namespace Expose;
 
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger;
+use Psr\Log\NullLogger;
+
 class Manager
 {
     /**
@@ -97,6 +101,10 @@ class Manager
 
         if ($logger !== null) {
             $this->setLogger($logger);
+        }
+        else {
+            $monolog = new Logger('expose', [new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING)]);
+            $this->setLogger($monolog);
         }
         if ($queue !== null) {
             $this->setQueue($queue);
