@@ -4,6 +4,7 @@ namespace Expose;
 
 use Expose\Exception\LoggerNotDefined;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger;
 
 require_once 'MockLogger.php';
 require_once 'MockQueue.php';
@@ -419,7 +420,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filters->load();
 
         $manager = new Manager($filters);
-        $this->assertInstanceOf('Monolog\Handler\ErrorLogHandler', $manager->getLogger(), '');
+        /** @var Logger $logger */
+        $logger = $manager->getLogger();
+        $this->assertInstanceOf('Monolog\Handler\ErrorLogHandler', $logger->getHandlers()[0], '');
     }
 
     /**
