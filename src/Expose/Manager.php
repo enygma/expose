@@ -210,7 +210,10 @@ class Manager
                 continue;
             }
 
-            $this->processFilters($value, $index, $path);
+            $filterMatches = array_merge(
+                $filterMatches,
+                $this->processFilters($value, $index, $path)
+            );
         }
 
         if ($cache !== null) {
@@ -227,12 +230,14 @@ class Manager
      */
     protected function processFilters($value, $index, $path)
     {
+        $filterMatches = [];
         $filters = $this->getFilters();
         $filters->rewind();
         while($filters->valid() && !$this->impactLimitReached()) {
             $filter = $filters->current();
             $filters->next();
             if ($filter->execute($value) === true) {
+                $filterMatches[] = $filter;
                 $this->getLogger()->info(
                     'Match found on Filter ID '.$filter->getId(),
                     array($filter->toArray())
@@ -245,6 +250,7 @@ class Manager
                 $this->impact += $filter->getImpact();
             }
         }
+        return $filterMatches;
     }
 
     /**
