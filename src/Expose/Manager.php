@@ -230,7 +230,7 @@ class Manager
      */
     protected function processFilters($value, $index, $path)
     {
-        $filterMatches = [];
+        $filterMatches = array();
         $filters = $this->getFilters();
         $filters->rewind();
         while($filters->valid() && !$this->impactLimitReached()) {
