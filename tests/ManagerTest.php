@@ -386,7 +386,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager_mock
            ->expects($this->once())
-           ->method('sendNotification');
+           ->method('sendNotification')
+           ->with(array($filter));
 
         $manager_mock->setThreshold(7);
         $manager_mock->run(array('test' => 'test'), false, true);
