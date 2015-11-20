@@ -122,9 +122,9 @@ class Manager
 
         // try to clean up standard filter bypass methods
         $converter = new \Expose\Converter\Converter;
-        foreach ($data as $key=>$datum){
+        foreach ($data as $key => $datum){
           if (!is_array($datum)){
-            $data[$key]=$converter->runAllConversions($data[$key]);
+            $data[$key] = $converter->runAllConversions($data[$key]);
           }
         }
 
