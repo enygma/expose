@@ -4,6 +4,9 @@ namespace Expose;
 
 class FilterConnectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Expose\FilterCollection
+     */
     private $collection = null;
 
     public function setUp()
@@ -13,7 +16,7 @@ class FilterConnectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the filter data in collection
-     * 
+     *
      * @covers \Expose\FilterCollection::getFilterData
      * @covers \Expose\FilterCollection::setFilterData
      */
@@ -32,4 +35,23 @@ class FilterConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result[0], $filter);
     }
 
+    /**
+     * Test the getter for the filter data in collection when requesting a single id
+     *
+     * @covers \Expose\FilterCollection::getFilterData
+     * @covers \Expose\FilterCollection::setFilterData
+     */
+    public function testGetFilterDataWithId() {
+        $data = array(
+          array('id' => 1234)
+        );
+
+        $filter = new \Expose\Filter();
+        $filter->setId(1234);
+
+        $this->collection->setFilterData($data);
+
+        $result = $this->collection->getFilterData(1234);
+        $this->assertEquals($filter, $result);
+    }
 }

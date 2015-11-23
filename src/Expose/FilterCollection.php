@@ -5,6 +5,10 @@ namespace Expose;
 class FilterCollection implements \ArrayAccess, \Iterator, \Countable
 {
     private $filterPath = 'filter_rules.json';
+
+    /**
+     * @var Filter[]
+     */
     private $filterData = array();
     private $index = 0;
 
@@ -96,8 +100,8 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
     public function getFilterData($filterId = null)
     {
         if ($filterId !== null) {
-            foreach ($this->filterData->filters->filter as $filter) {
-                if ($filter->id == $filterId) {
+            foreach ($this->filterData as $filter) {
+                if ($filter->getId() == $filterId) {
                     return $filter;
                 }
             }
