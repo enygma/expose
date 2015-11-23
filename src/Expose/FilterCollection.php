@@ -92,6 +92,21 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
+     * Alter the impact level of a specific filter id.
+     *
+     * @param integer $filterId
+     * @param integer $impact
+     */
+    public function setFilterImpact($filterId, $impact) {
+        $Filter = $this->getFilterData($filterId);
+
+        if($Filter === null) {
+            return;
+        }
+        $Filter->setImpact($impact);
+    }
+
+    /**
      * Return all current filter data (or one specific filter)
      *
      * @param integer $filterId Filter ID #

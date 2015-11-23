@@ -54,4 +54,20 @@ class FilterConnectionTest extends \PHPUnit_Framework_TestCase
         $result = $this->collection->getFilterData(1234);
         $this->assertEquals($filter, $result);
     }
+
+    /**
+     * Tests setting the filter impact via the collection helper method
+     *
+     * @covers \Expose\FilterCollection::setFilterImpact
+     */
+    public function testGetSetFilterImpact() {
+        $filter = new Filter();
+        $filter->setId(1234);
+        $filter->setImpact(3);
+
+        $this->collection->addFilter($filter);
+
+        $this->collection->setFilterImpact(1234, 27);
+        $this->assertEquals(27, $filter->getImpact());
+    }
 }
