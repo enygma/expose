@@ -98,12 +98,12 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
      * @param integer $impact
      */
     public function setFilterImpact($filterId, $impact) {
-        $Filter = $this->getFilterData($filterId);
+        $filter = $this->getFilterData($filterId);
 
-        if($Filter === null) {
+        if($filter === null) {
             return;
         }
-        $Filter->setImpact($impact);
+        $filter->setImpact($impact);
     }
 
     /**
