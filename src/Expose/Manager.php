@@ -194,7 +194,7 @@ class Manager
 
             // see if it's an exception
             if ($this->isException(implode('.', $path))) {
-                $this->getLogger()->info('Exception found on '.implode('.', $path));
+                $this->getLogger()->notice('Exception found on '.implode('.', $path));
                 continue;
             }
 
@@ -211,7 +211,7 @@ class Manager
 
             // See if we have restrictions & if the path matches
             if (!empty($restrictions) && !in_array($p, $restrictions)) {
-                $this->getLogger()->info(
+                $this->getLogger()->notice(
                     'Restrictions enabled, no match on path '.implode('.', $path),
                     array('restrictions' => $restrictions)
                 );
@@ -246,7 +246,7 @@ class Manager
             $filters->next();
             if ($filter->execute($value) === true) {
                 $filterMatches[] = $filter;
-                $this->getLogger()->info(
+                $this->getLogger()->alert(
                     'Match found on Filter ID '.$filter->getId(),
                     array($filter->toArray())
                 );
@@ -274,7 +274,7 @@ class Manager
 
         $reached = $this->impact >= $this->impactLimit;
         if ($reached) {
-            $this->getLogger()->info(
+            $this->getLogger()->critical(
                 'Reached Impact limit'
             );
         }
