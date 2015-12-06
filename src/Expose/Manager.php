@@ -118,6 +118,7 @@ class Manager
         }
 
         $this->setData($data);
+        // dude - why we use $data when data are into $this->data variable?
         $data = $this->getData();
 
         // try to clean up standard filter bypass methods
@@ -130,6 +131,7 @@ class Manager
 
         $path = array();
         $filterMatches = $this->runFilters($data, $path);
+        // dude - why we use $impact when data are into $this->impact variable?
         $impact = $this->impact;
 
         // Check our threshold to see if we even need to send
