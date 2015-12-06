@@ -14,7 +14,7 @@ class Manager
      * Set of filters to execute
      * @var \Expose\FilterCollection
      */
-    private $filters = null; 
+    private $filters = null;
 
     /**
      * Overall impact score of the filter execution
@@ -120,6 +120,14 @@ class Manager
         $this->setData($data);
         $data = $this->getData();
 
+        // try to clean up standard filter bypass methods
+        $converter = new \Expose\Converter\Converter;
+        foreach ($data as $key => $datum){
+          if (!is_array($datum)){
+            $data[$key] = $converter->runAllConversions($data[$key]);
+          }
+        }
+
         $path = array();
         $filterMatches = $this->runFilters($data, $path);
         $impact = $this->impact;
@@ -210,7 +218,10 @@ class Manager
                 continue;
             }
 
-            $this->processFilters($value, $index, $path);
+            $filterMatches = array_merge(
+                $filterMatches,
+                $this->processFilters($value, $index, $path)
+            );
         }
 
         if ($cache !== null) {
@@ -227,12 +238,14 @@ class Manager
      */
     protected function processFilters($value, $index, $path)
     {
+        $filterMatches = array();
         $filters = $this->getFilters();
         $filters->rewind();
         while($filters->valid() && !$this->impactLimitReached()) {
             $filter = $filters->current();
             $filters->next();
             if ($filter->execute($value) === true) {
+                $filterMatches[] = $filter;
                 $this->getLogger()->info(
                     'Match found on Filter ID '.$filter->getId(),
                     array($filter->toArray())
@@ -245,6 +258,7 @@ class Manager
                 $this->impact += $filter->getImpact();
             }
         }
+        return $filterMatches;
     }
 
     /**
@@ -612,7 +626,7 @@ class Manager
      *
      * @return mixed Either a \Expose\Cache instance or null
      */
-    public function getCache() 
+    public function getCache()
     {
         return $this->cache;
     }
