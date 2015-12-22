@@ -5,10 +5,6 @@ namespace Expose;
 class FilterCollection implements \ArrayAccess, \Iterator, \Countable
 {
     private $filterPath = 'filter_rules.json';
-
-    /**
-     * @var Filter[]
-     */
     private $filterData = array();
     private $index = 0;
 
@@ -92,21 +88,6 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Alter the impact level of a specific filter id.
-     *
-     * @param integer $filterId
-     * @param integer $impact
-     */
-    public function setFilterImpact($filterId, $impact) {
-        $filter = $this->getFilterData($filterId);
-
-        if($filter === null) {
-            return;
-        }
-        $filter->setImpact($impact);
-    }
-
-    /**
      * Return all current filter data (or one specific filter)
      *
      * @param integer $filterId Filter ID #
@@ -115,8 +96,8 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
     public function getFilterData($filterId = null)
     {
         if ($filterId !== null) {
-            foreach ($this->filterData as $filter) {
-                if ($filter->getId() == $filterId) {
+            foreach ($this->filterData->filters->filter as $filter) {
+                if ($filter->id == $filterId) {
                     return $filter;
                 }
             }
