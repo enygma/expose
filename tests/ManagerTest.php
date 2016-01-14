@@ -423,7 +423,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $manager = new Manager($filters);
         /** @var Logger $logger */
         $logger = $manager->getLogger();
-        $this->assertInstanceOf('Monolog\Handler\ErrorLogHandler', $logger->getHandlers()[0], '');
+        $handlers = $logger->getHandlers();
+        $this->assertInstanceOf('Monolog\Handler\ErrorLogHandler', $handlers[0], '');
     }
 
     /**

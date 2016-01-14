@@ -103,7 +103,7 @@ class Manager
             $this->setLogger($logger);
         }
         else {
-            $monolog = new Logger('expose', [new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING)]);
+            $monolog = new Logger('expose', array(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING)));
             $this->setLogger($monolog);
         }
         if ($queue !== null) {
