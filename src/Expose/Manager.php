@@ -128,6 +128,14 @@ class Manager
         $this->setData($data);
         $data = $this->getData();
 
+        // try to clean up standard filter bypass methods
+        $converter = new \Expose\Converter\Converter;
+        foreach ($data as $key => $datum){
+          if (!is_array($datum)){
+            $data[$key] = $converter->runAllConversions($data[$key]);
+          }
+        }
+
         $path = array();
         $filterMatches = $this->runFilters($data, $path);
         $impact = $this->impact;
