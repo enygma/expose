@@ -1,5 +1,5 @@
 /vendor/
 /composer.lock
 /phpunit.xml
-/.idea/
+/cache_tmp/
 /nbproject/

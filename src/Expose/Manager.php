@@ -170,6 +170,8 @@ class Manager
     public function runFilters($data, $path, $lvl = 0)
     {
         $filterMatches = array();
+        $cacheData = array();
+        
         $restrictions = $this->getRestrictions();
         $sig = md5(print_r($data, true));
 
@@ -177,10 +179,12 @@ class Manager
         if ($cache !== null) {
             $cacheData = $cache->get($sig);
             if ($cacheData !== null) {
-                return $cacheData;
+                $this->impact = (isset($cacheData['impact']) ? $cacheData['impact'] : 0);
+                $this->reports = (isset($cacheData['reports']) ? $cacheData['reports'] : array());
+                return (isset($cacheData['filterMatches']) ? $cacheData['filterMatches'] : array());
             }
         }
-
+        
         $data = new \ArrayIterator($data);
         $data->rewind();
         while($data->valid() && !$this->impactLimitReached()) {
@@ -227,7 +231,12 @@ class Manager
         }
 
         if ($cache !== null) {
-            $cache->save($sig, $filterMatches);
+            $cacheData = array(
+                'filterMatches' => $filterMatches,
+                'reports' => $this->reports,
+                'impact' => $this->impact
+            );
+            $cache->save($sig, $cacheData);
         }
         return $filterMatches;
     }
