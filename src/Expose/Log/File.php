@@ -1,7 +1,7 @@
 <?php
 
 namespace Expose\Log;
-
+// Not implemented, to-do
 class File extends \Expose\Log
 {
     
