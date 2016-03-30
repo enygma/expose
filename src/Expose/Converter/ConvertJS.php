@@ -19,7 +19,7 @@ class ConvertJS
     {
         $matches = array();
         // check if value matches typical charCode pattern
-        if (preg_match_all('/(?:[\d+-=\/\* ]+(?:\s?,\s?[\d+-=\/\* ]+)){4,}/ms', $value, $matches)) {
+        if (preg_match_all('/(?:[\d+\-=\/\* ]+(?:\s?,\s?[\d+\-=\/\* ]+)){4,}/ms', $value, $matches)) {
             $converted = '';
             $string    = implode(',', $matches[0]);
             $string    = preg_replace('/\s/', '', $string);
