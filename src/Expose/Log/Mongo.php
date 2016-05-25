@@ -187,7 +187,7 @@ class Mongo extends \Expose\Log
      */
     public function debug($message, array $context = array())
     {
-        return $this->log('debug', message, context);
+        return $this->log('debug', $message, $context);
     }
 
     /**
