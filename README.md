@@ -16,10 +16,31 @@ for names of those who have contributed.
 the first level of threat identification. Please read up on "[Defense in Depth](http://websec.io/2012/10/12/Core-Concepts-Defense-in-Depth.html)"
 for more information on a layered security approach.
 
-**Example usage:**
+### Quick Install
+
+1. Install Composer:
+
+    ```
+    curl -s https://getcomposer.org/installer | php
+    ```
+
+1. Require Expose as a dependency using Composer:
+
+    ```
+    php composer.phar require enygma/expose
+    ```
+
+1. Install Expose:
+
+    ```
+    php composer.phar install
+    ```
+
+### Example Usage
 
 ```php
 <?php
+require 'vendor/autoload.php';
 
 $data = array(
     'POST' => array(
@@ -49,7 +70,7 @@ print_r($reports);
 // export out the report in the given format ("text" is default)
 echo $manager->export();
 echo "\n\n";
-?>
+
 ```
 
 ### Full Documentation
