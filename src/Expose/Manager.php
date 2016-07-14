@@ -94,10 +94,11 @@ class Manager
     )
     {
         $this->setFilters($filters);
-
-        if ($logger !== null) {
-            $this->setLogger($logger);
-        }
+        $this->setLogger(
+	    $logger ?: new \Expose\Log\NullLogger
+	);
+        
+        
         if ($queue !== null) {
             $this->setQueue($queue);
         }
