@@ -50,7 +50,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
         
         $this->assertInstanceOf(
-            '\Expose\Log\NullLogger',
+            '\Psr\Log\NullLogger',
             $manager->getLogger()
         );
     }
