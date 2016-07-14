@@ -95,7 +95,7 @@ class Manager
     {
         $this->setFilters($filters);
         $this->setLogger(
-	    $logger ?: new \Expose\Log\NullLogger
+	    $logger ?: new \Psr\Log\NullLogger
 	);
         
         
