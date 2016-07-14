@@ -39,6 +39,23 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test default logger
+     *
+     * @covers \Expose\Manager::__construct
+     */
+    public function testSetDefaultLogger()
+    {
+        $manager = new \Expose\Manager(
+            new \Expose\FilterCollection()
+        );
+        
+        $this->assertInstanceOf(
+            '\Expose\Log\NullLogger',
+            $manager->getLogger()
+        );
+    }
+    
+    /**
      * Test that the getter and setter for assigning filters
      *     works correctly
      *
