@@ -97,8 +97,7 @@ class Manager
         $this->setLogger(
 	    $logger ?: new \Psr\Log\NullLogger
 	);
-        
-        
+	
         if ($queue !== null) {
             $this->setQueue($queue);
         }
