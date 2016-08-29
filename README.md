@@ -4,10 +4,10 @@ Expose: an IDS for PHP
 [![Build Status](https://secure.travis-ci.org/enygma/expose.png?branch=master)](http://travis-ci.org/enygma/expose)
 ![Insight Rating](https://insight.sensiolabs.com/projects/225eb78a-5af9-4ded-891c-6f04fb709362/small.png)
 
-Expose is an Intrusion Detection System for PHP loosely based on the PHPIDS project (and using it's ruleset
+Expose is an Intrusion Detection System for PHP loosely based on the PHPIDS project (and using its ruleset
 for detecting potential threats).
 
-**ALL CREDIT** for the rule set for Expose goes to the PHP IDS project. Expose literally
+**ALL CREDIT** for the rule set for Expose goes to the PHPIDS project. Expose literally
 uses the same JSON configuration for its execution. I am not claiming any kind of ownership
 or authorship of these rules. Please see [the PHPIDS github README](https://github.com/PHPIDS/PHPIDS)
 for names of those who have contributed.
