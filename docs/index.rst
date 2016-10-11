@@ -6,7 +6,7 @@
 Expose - PHP Intrusion Detection
 ==================================
 
-**Expose** (pronounced *ex-pose-a*, pretend you're French) is an Intrusion Detection System for PHP loosely based on the PHPIDS project (and using it's ruleset for detecting potential threats). You can find the latest version over on `it's github page <http://github.com/enygma/expose>`_.
+**Expose** (pronounced *ex-pose-a*, pretend you're French) is an Intrusion Detection System for PHP loosely based on the PHPIDS project (and using its ruleset for detecting potential threats). You can find the latest version over on `its github page <http://github.com/enygma/expose>`_.
 
 **ALL CREDIT** for the rule set for Expose goes to the PHP IDS project. Expose literally uses the same JSON configuration for its execution. I am not claiming any kind of ownership or authorship of these rules. Please see the PHPIDS github README for names of those who have contributed.
 
