@@ -21,18 +21,6 @@ abstract class Log implements LoggerInterface
 	public abstract function log($level, $message, array $context = array());
 
     /**
-     * Init the object and connect if string is given
-     * 
-     * @param object $connectString Connection string to logger instance
-     */
-	public function __construct($connectString = null)
-	{
-		if ($connectString !== null) {
-			$this->connect($connectString);
-		}
-	}
-
-    /**
      * Set the logger object instance
      *
      * @param object $logger Logger instance
