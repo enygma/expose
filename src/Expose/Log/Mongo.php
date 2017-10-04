@@ -203,7 +203,7 @@ class Mongo extends \Expose\Log
         $logger = new \Monolog\Logger('audit');
         try {
             $handler = new \Monolog\Handler\MongoDBHandler(
-                new \Mongo($this->getConnectString()),
+                new \MongoClient($this->getConnectString()),
                 $this->getDbName(),
                 $this->getDbCollection()
             );
