@@ -3,7 +3,7 @@
 namespace Expose\Converter;
 
 /**
- * Class forklifted with premission primarily from PHPIDS
+ * Class forklifted with permission primarily from PHPIDS
  * ConvertSQL is an anti-evasion normalization module focused on SQL tricks
  */
 class ConvertSQL
@@ -18,8 +18,8 @@ class ConvertSQL
     public function convertFromSQLHex($value)
     {
         $matches = array();
-        if (preg_match_all('/(?:(?:\A|[^\d])0x[a-f\d]{3,}[a-f\d]*)+/im', $value, $matches)) {
-            foreach ($matches[0] as $match) {
+        if (preg_match_all('/(?:\A|[^\d])(0x[a-f\d]{3,})+/im', $value, $matches)) {
+            foreach ($matches[1] as $match) {
                 $converted = '';
                 foreach (str_split($match, 2) as $hex_index) {
                     if (preg_match('/[a-f\d]{2,3}/i', $hex_index)) {
