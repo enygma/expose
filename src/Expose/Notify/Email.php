@@ -90,11 +90,11 @@ class Email extends \Expose\Notify
         $fromAddress = $this->getFromAddress();
 
         if ($toAddress === null) {
-            throw new \InvalidArgumentExcepion('Invalid "to" email address');
+            throw new \InvalidArgumentException('Invalid "to" email address');
         }
 
         if ($fromAddress === null) {
-            throw new \InvalidArgumentExcepion('Invalid "from" email address');
+            throw new \InvalidArgumentException('Invalid "from" email address');
         }
 
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../Template');
