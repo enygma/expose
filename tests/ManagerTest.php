@@ -2,6 +2,10 @@
 
 namespace Expose;
 
+use Expose\Exception\LoggerNotDefined;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger;
+
 require_once 'MockLogger.php';
 require_once 'MockQueue.php';
 
@@ -21,17 +25,17 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $logger = new \Expose\Log\Mongo();
-        $filters = new \Expose\FilterCollection();
-        $this->manager = new \Expose\Manager($filters, $logger);
+        $filters = new FilterCollection();
+        $this->manager = new Manager($filters, $logger);
     }
 
     public function executeFilters($data, $queue = false, $notify = false)
     {
-        $filterCollection = new \Expose\FilterCollection();
+        $filterCollection = new FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
 
         $logger = new MockLogger();
-        $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager = new Manager($filterCollection, $logger);
         $manager->setConfig(array('test' => 'foo'));
         $manager->run($data, $queue, $notify);
 
@@ -47,7 +51,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSetFilters()
     {
-        $filters = new \Expose\FilterCollection();
+        $filters = new FilterCollection();
         $filters->setFilterData($this->sampleFilters);
 
         $this->manager->setFilters($filters);
@@ -127,11 +131,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $filterCollection = new \Expose\FilterCollection();
+        $filterCollection = new FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
 
         $logger = new MockLogger();
-        $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager = new Manager($filterCollection, $logger);
         $manager->setImpactLimit(1);
         $manager->setConfig(array('test' => 'foo'));
         $manager->run($data, false, false);
@@ -273,11 +277,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsIgnored()
     {
-        $filterCollection = new \Expose\FilterCollection();
+        $filterCollection = new FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
 
         $logger = new MockLogger();
-        $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager = new Manager($filterCollection, $logger);
         $manager->setConfig(array('test' => 'foo'));
         $manager->setException('POST.foo');
         $manager->setException('POST.bar.baz');
@@ -303,11 +307,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionWildcardIsIgnored()
     {
-        $filterCollection = new \Expose\FilterCollection();
+        $filterCollection = new FilterCollection();
         $filterCollection->setFilterData($this->sampleFilters);
 
         $logger = new MockLogger();
-        $manager = new \Expose\Manager($filterCollection, $logger);
+        $manager = new Manager($filterCollection, $logger);
         $manager->setConfig(array('test' => 'foo'));
         $manager->setException('POST.foo[0-9]+');
 
@@ -372,7 +376,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filter = new \Expose\Filter();
         $filter->setImpact(100);
 
-        $collection   = new \Expose\FilterCollection();
+        $collection   = new FilterCollection();
         $collection->addFilter($filter);
 
         $manager_mock = $this->getMockBuilder('\\Expose\\Manager')
@@ -393,7 +397,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $filter = new \Expose\Filter();
         $filter->setImpact(5);
 
-        $collection   = new \Expose\FilterCollection();
+        $collection   = new FilterCollection();
         $collection->addFilter($filter);
 
         $manager_mock = $this->getMockBuilder('\\Expose\\Manager')
@@ -407,5 +411,37 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager_mock->setThreshold(100);
         $manager_mock->run(array('test' => 'test'), false, true);
+    }
+
+  /**
+   * Test that a proper default ErrorLogHandler is set.
+   */
+    public function testLoggerDefaultErrorLog() {
+        $filters = new FilterCollection();
+        $filters->load();
+
+        $manager = new Manager($filters);
+        /** @var Logger $logger */
+        $logger = $manager->getLogger();
+        $handlers = $logger->getHandlers();
+        $this->assertInstanceOf('Monolog\Handler\ErrorLogHandler', $handlers[0], '');
+    }
+
+    /**
+     * Tests a null logger does not throw exceptions on run().
+     */
+    public function testLoggerUndefined() {
+        $filters = new FilterCollection();
+        $filters->load();
+
+        $manager = new Manager($filters);
+        $manager->setThreshold(0);
+        try {
+            $result = $manager->run(array('test'), FALSE, TRUE);
+            $this->assertNotEmpty($result, 'Results returned with an undefined logger');
+        }
+        catch (LoggerNotDefined $e) {
+            $this->fail('Undefined logger does not throw an exception');
+        }
     }
 }
