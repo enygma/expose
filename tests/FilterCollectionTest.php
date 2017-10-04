@@ -36,6 +36,48 @@ class FilterConnectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the getter/setter for the filter data in collection with an object
+     *
+     * @covers \Expose\FilterCollection::getFilterData
+     * @covers \Expose\FilterCollection::setFilterData
+     */
+    public function testGetSetFilterDataWithObject()
+    {
+        $data = array(
+            (object) array('id' => 1234)
+        );
+        $filter = new \Expose\Filter();
+        $filter->setId(1234);
+
+        $this->collection->setFilterData($data);
+
+        $result = $this->collection->getFilterData();
+        $this->assertEquals($result[0], $filter);
+    }
+
+    /**
+     * Test the getter/setter for the filter data in collection with several filters
+     *
+     * @covers \Expose\FilterCollection::getFilterData
+     * @covers \Expose\FilterCollection::setFilterData
+     */
+    public function testGetSetFilterDataWithMultipleFilters()
+    {
+        $filter1 = new \Expose\Filter(array('id' => 1234));
+        $filter2 = new \Expose\Filter(array('id' => 5678));
+        $data = array(
+            array('id' => 1234),
+            array('id' => 5678),
+        );
+
+        $this->collection->setFilterData($data);
+
+        $result = $this->collection->getFilterData();
+        $this->assertEquals($result[0], $filter1);
+        $this->assertEquals($result[1], $filter2);
+    }
+
+    /**
      * Test the getter for the filter data in collection when requesting a single id
      *
      * @covers \Expose\FilterCollection::getFilterData

@@ -82,11 +82,9 @@ class FilterCollection implements \ArrayAccess, \Iterator, \Countable
      */
     public function setFilterData($data)
     {
-        foreach ($data as $index => $config) {
-            if (is_object($config)) {
-                $config = get_object_vars($config);
-            }
-            $filter = new \Expose\Filter($config);
+        foreach ($data as $config) {
+            $filter = new \Expose\Filter();
+            $filter->load($config);
             $this->addFilter($filter);
         }
     }

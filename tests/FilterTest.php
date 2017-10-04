@@ -115,7 +115,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * @covers \Expose\Filter::setRule
      * @covers \Expose\Filter::execute
      */
-    public function testMAtchDataInvalid()
+    public function testMatchDataInvalid()
     {
         $data = 'barbaz';
         $rule = '^foo[0-9]+';
@@ -146,5 +146,28 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $filter->toArray(), $data
         );
+    }
+
+    /**
+     * Test that an object can be loaded
+     *
+     * @covers \Expose\Filter::load
+     */
+    public function testLoadDataAsObject()
+    {
+        $data = new \stdClass();
+        $data->id = 1234;
+        $data->rule = '^foo[0-9]+';
+        $data->description = 'this is a test';
+        $data->tags = array('csrf', 'xss');
+        $data->impact = 3;
+
+        $filter = new \Expose\Filter();
+        $filter->load($data);
+        $this->assertEquals($filter->getId(), $data->id);
+        $this->assertEquals($filter->getRule(), $data->rule);
+        $this->assertEquals($filter->getDescription(), $data->description);
+        $this->assertEquals($filter->getTags(), $data->tags);
+        $this->assertEquals($filter->getImpact(), $data->impact);
     }
 }
