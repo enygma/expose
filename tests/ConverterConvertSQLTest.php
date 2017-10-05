@@ -16,4 +16,16 @@ class ConvertSQLTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($converter->convertFromSQLKeywords('SELECT 1,null;'), 'SELECT 1,0;');
         $this->assertEquals($converter->convertFromSQLKeywords('SELECT 1, null;'), 'SELECT 1,0;');
     }
+
+    /**
+     * Test the issue #63
+     *
+     * @covers \Expose\Converter\ConvertSQL::convertFromSQLHex
+     */
+    public function testConvertFromSQLHex()
+    {
+        $converter = new \Expose\Converter\ConvertSQL();
+        $this->assertEquals($converter->convertFromSQLHex('0x6D7973716C'), 'mysql');
+        $this->assertEquals($converter->convertFromSQLHex('SELECT 0x6D7973716C'), 'SELECT mysql');
+    }
 }
