@@ -503,7 +503,7 @@
       },
       {
         "id":"41",
-        "rule":"(?:[\\s()]case\\s*\\()|(?:\\)\\s*like\\s*\\()|(?:having\\s*[^\\s]+\\s*[^\\w\\s])|(?:if\\s?\\([\\d\\w]\\s*[=<>~])",
+        "rule":"(?:[\\s()]case\\s*\\()|(?:\\)\\s*like\\s*\\()|(?:having\\s*[^\\s]+\\s*[^\\w\\s])|(?:if\\s?\\([\\d\\w]\\s*[=<>~])|(?:\\|\\|)",
         "description":"Detects conditional SQL injection attempts",
         "tags":{
           "tag":[
