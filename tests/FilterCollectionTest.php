@@ -11,7 +11,7 @@ class FilterConnectionTest extends TestCase
      */
     private $collection = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->collection = new FilterCollection();
     }

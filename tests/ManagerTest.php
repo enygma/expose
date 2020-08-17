@@ -25,7 +25,7 @@ class ManagerTest extends TestCase
         ),
     );
 
-    public function setUp()
+    public function setUp(): void
     {
         $logger = new Mongo();
         $filters = new FilterCollection();

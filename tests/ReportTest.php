@@ -8,7 +8,7 @@ class ReportTest extends TestCase
 {
     private $report = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->report = new Report();
     }

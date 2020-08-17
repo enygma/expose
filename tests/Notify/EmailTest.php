@@ -9,7 +9,7 @@ class EmailTest extends TestCase
 {
 	private $email = null;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->email = new Email();
 	}
