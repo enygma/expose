@@ -1,8 +1,7 @@
 language: php
 before_script:
   - phpenv config-add travis-config.ini
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar install --dev
+  - composer install --dev
 php:
   - 7.2
   - 7.3
