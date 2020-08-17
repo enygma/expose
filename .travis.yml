@@ -1,10 +1,9 @@
 language: php
 before_script:
   - phpenv config-add travis-config.ini
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar install --dev
+  - composer install
 php:
-  - 5.5
-  - 5.6
-  - 7.0
+  - 7.2
+  - 7.3
+  - 7.4
 script: phpunit

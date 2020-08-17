@@ -2,18 +2,20 @@
 
 namespace Expose;
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FilterTest extends TestCase
 {
     private $filter = null;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->filter = new \Expose\Filter();
+        $this->filter = new Filter();
     }
 
     /**
      * Test the getter/setter for impact value
-     * 
+     *
      * @covers \Expose\Filter::setImpact
      * @covers \Expose\Filter::getImpact
      */
@@ -29,7 +31,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the tag value
-     * 
+     *
      * @covers \Expose\Filter::setTags
      * @covers \Expose\Filter::getTags
      */
@@ -45,7 +47,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the description
-     * 
+     *
      * @covers \Expose\Filter::setDescription
      * @covers \Expose\Filter::getDescription
      */
@@ -61,7 +63,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the ID
-     * 
+     *
      * @covers \Expose\Filter::setId
      * @covers \Expose\Filter::getId
      */
@@ -77,7 +79,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the gettet/setter for the regex rule
-     * 
+     *
      * @covers \Expose\Filter::setRule
      * @covers \Expose\Filter::getRule
      */
@@ -94,7 +96,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that the result is true when a match is found
      *     for the rule
-     * 
+     *
      * @covers \Expose\Filter::setRule
      * @covers \Expose\Filter::execute
      */
@@ -111,7 +113,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that the result is false when a match is not found
-     * 
+     *
      * @covers \Expose\Filter::setRule
      * @covers \Expose\Filter::execute
      */
@@ -128,7 +130,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that the output of the data in an array is correct
-     * 
+     *
      * @covers \Expose\Filter::toArray
      */
     public function testOutputAsArray()
@@ -140,7 +142,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'tags' => array('csrf', 'xss'),
             'impact' => 3
         );
-        $filter = new \Expose\Filter($data);
+        $filter = new Filter($data);
         $data['tags'] = 'csrf, xss';
 
         $this->assertEquals(

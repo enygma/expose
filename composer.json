@@ -1,5 +1,6 @@
 {
     "name":"enygma/expose",
+    "version": "4.0.0",
     "type":"library",
     "description":"An intrusion detection library based on PHPIDS",
     "keywords":["ids","intrusion","detection"],
@@ -13,13 +14,13 @@
         }
     ],
     "require":{
-        "php":">=5.3.1",
-        "twig/twig": "1.*|2.*",
-        "monolog/monolog": "~1.4",
-        "symfony/console": "~2.1|~3.0"
+        "php":">=7.2",
+        "twig/twig": "~3.0",
+        "monolog/monolog": "~2.0",
+        "symfony/console": "~2.1|~3.0|~4.0|~5.0"
     },
     "require-dev" : {
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "7.*",
         "squizlabs/php_codesniffer": "1.*",
         "phpmd/phpmd": "dev-master"
     },

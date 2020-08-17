@@ -2,13 +2,15 @@
 
 namespace Expose;
 
-class ReportTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ReportTest extends TestCase
 {
     private $report = null;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->report = new \Expose\Report();
+        $this->report = new Report();
     }
 
     /**
@@ -99,7 +101,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
      */
     public function testObjectToArrayExpandFilters()
     {
-        $filter = new \Expose\Filter();
+        $filter = new Filter();
         $filter->setId(1234);
 
         $this->report->addFilterMatch($filter);
