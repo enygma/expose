@@ -2,7 +2,9 @@
 
 namespace Expose;
 
-class FilterConnectionTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FilterConnectionTest extends TestCase
 {
     /**
      * @var \Expose\FilterCollection
@@ -26,7 +28,7 @@ class FilterConnectionTest extends \PHPUnit_Framework_TestCase
             array('id' => 1234)
         );
 
-        $filter = new \Expose\Filter();
+        $filter = new Filter();
         $filter->setId(1234);
 
         $this->collection->setFilterData($data);
@@ -46,7 +48,7 @@ class FilterConnectionTest extends \PHPUnit_Framework_TestCase
           array('id' => 1234)
         );
 
-        $filter = new \Expose\Filter();
+        $filter = new Filter();
         $filter->setId(1234);
 
         $this->collection->setFilterData($data);

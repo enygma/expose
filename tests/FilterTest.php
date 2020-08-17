@@ -2,13 +2,15 @@
 
 namespace Expose;
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FilterTest extends TestCase
 {
     private $filter = null;
 
     public function setUp()
     {
-        $this->filter = new \Expose\Filter();
+        $this->filter = new Filter();
     }
 
     /**
@@ -140,7 +142,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'tags' => array('csrf', 'xss'),
             'impact' => 3
         );
-        $filter = new \Expose\Filter($data);
+        $filter = new Filter($data);
         $data['tags'] = 'csrf, xss';
 
         $this->assertEquals(

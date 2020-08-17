@@ -3,9 +3,7 @@
          convertErrorsToExceptions="true"
          convertWarningsToExceptions="true"
          convertNoticesToExceptions="true"
-         mapTestClassNameToCoveredClassName="true"
          bootstrap="vendor/autoload.php"
-         strict="true"
          verbose="true"
          colors="true">
     <testsuites>
@@ -13,4 +11,12 @@
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <file>src/autoload.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>

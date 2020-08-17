@@ -2,13 +2,16 @@
 
 namespace Expose\Notify;
 
-class EmailTest extends \PHPUnit_Framework_TestCase
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+
+class EmailTest extends TestCase
 {
 	private $email = null;
 
 	public function setUp()
 	{
-		$this->email = new \Expose\Notify\Email();
+		$this->email = new Email();
 	}
 
 	/**
@@ -32,7 +35,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 	 * Try to set an invalid email To address
 	 * 
 	 * @covers \Expose\Notify\Email::setToAddress
-	 * @expectedException \InvalidArgumentException
+	 * @expectedException InvalidArgumentException
 	 */
 	public function testSetInvalidEmailToAddress()
 	{
@@ -61,7 +64,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 	 * Try to set an invalid email From address
 	 * 
 	 * @covers \Expose\Notify\Email::setFromAddress
-	 * @expectedException \InvalidArgumentException
+	 * @expectedException InvalidArgumentException
 	 */
 	public function testSetInvalidEmailFromAddress()
 	{

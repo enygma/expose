@@ -2,7 +2,9 @@
 
 namespace Expose\Converter;
 
-class ConvertSQLTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ConvertSQLTest extends TestCase
 {
 
     /**
@@ -12,7 +14,7 @@ class ConvertSQLTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertFromSQLKeywordsWithNull()
     {
-        $converter = new \Expose\Converter\ConvertSQL();
+        $converter = new ConvertSQL();
         $this->assertEquals($converter->convertFromSQLKeywords('SELECT 1,null;'), 'SELECT 1,0;');
         $this->assertEquals($converter->convertFromSQLKeywords('SELECT 1, null;'), 'SELECT 1,0;');
     }

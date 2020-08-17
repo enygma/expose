@@ -2,41 +2,50 @@
 
 namespace Expose;
 
+use Expose\Queue\Mongo;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use stdClass;
+
 include_once 'MockMongoCollection.php';
 
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends TestCase
 {
     private $queue = null;
 
     /**
      * Get a mock of the Queue object that returns the given results
-     * 
+     *
      * @param mixed $return Return data
-     * @return Mocked object
+     *
+     * @return MockObject
      */
     public function getQueueMock($return)
     {
-        $collection = new \Expose\MockMongoCollection($return);
+        $collection = new MockMongoCollection($return);
 
-        $mock = $this->getMock('\\Expose\\Queue\\Mongo', array('getCollection'));
+        $mock = $this->getMockBuilder(
+            '\\Expose\\Queue\\Mongo',
+        )->setMethods(array('getCollection'))
+            ->getMock();
         $mock->expects($this->once())
             ->method('getCollection')
             ->will($this->returnValue($collection));
-        
+
         return $mock;
     }
 
     /**
      * Test the setting of the adapter on object construction
-     * 
+     *
      * @covers \Expose\Queue::__construct
      * @covers \Expose\Queue::getAdapter
      */
     public function testSetAdapterOnConstruct()
     {
-        $adapter = new \stdClass();
+        $adapter = new stdClass();
         $adapter->foo = 'test';
-        $queue = new \Expose\Queue\Mongo($adapter);
+        $queue = new Mongo($adapter);
 
         $this->assertEquals(
             $queue->getAdapter(),
@@ -46,16 +55,16 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getter/setter for the adapter of the queue
-     * 
+     *
      * @covers \Expose\Queue::getAdapter
      * @covers \Expose\Queue::setAdapter
      */
     public function testGetSetAdapter()
     {
-        $adapter = new \stdClass();
+        $adapter = new stdClass();
         $adapter->foo = 'test';
-        
-        $queue = new \Expose\Queue\Mongo();
+
+        $queue = new Mongo();
         $queue->setAdapter($adapter);
 
         $this->assertEquals(
@@ -66,7 +75,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get the current set of pending records
-     * 
+     *
      * @covers \Expose\Queue::getPending
      */
     public function testGetPendingRecords()
@@ -85,7 +94,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
         $queue = $this->getQueueMock($result);
         $results = $queue->getPending();
-        
+
         // be sure they're all "pending"
         $pass = true;
         foreach ($results as $result) {
