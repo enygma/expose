@@ -13,7 +13,7 @@ class MockMongoCollection
 
     public function __construct($data)
     {
-        $this->data = new \Expose\MockMongoCursor($data);
+        $this->data = new MockMongoCursor($data);
     }
 
     public function __call($name, $args)
