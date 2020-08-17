@@ -2,6 +2,8 @@
 
 namespace Expose\Queue;
 
+use MongoDB\Driver\Manager;
+
 class Mongo extends \Expose\Queue
 {
     /**
@@ -24,7 +26,7 @@ class Mongo extends \Expose\Queue
     public function getAdapter()
     {
         if ($this->adapter === null) {
-            $this->setAdapter(new \MongoClient());
+            $this->setAdapter(new Manager());
         }
         return $this->adapter;
     }
