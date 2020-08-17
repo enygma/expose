@@ -13,7 +13,7 @@ class MongoTest extends TestCase
      */
     private $test;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->test = new Mongo();
     }
