@@ -1,5 +1,6 @@
 language: php
 before_script:
+  - pecl install mongo
   - phpenv config-add travis-config.ini
   - composer install --dev
 php:
