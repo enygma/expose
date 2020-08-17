@@ -35,10 +35,10 @@ class EmailTest extends TestCase
 	 * Try to set an invalid email To address
 	 * 
 	 * @covers \Expose\Notify\Email::setToAddress
-	 * @expectedException InvalidArgumentException
 	 */
 	public function testSetInvalidEmailToAddress()
 	{
+	    $this->expectException(InvalidArgumentException::class);
 		$email = 'invalidemail';
 		$this->email->setToAddress($email);	
 	}
@@ -64,10 +64,10 @@ class EmailTest extends TestCase
 	 * Try to set an invalid email From address
 	 * 
 	 * @covers \Expose\Notify\Email::setFromAddress
-	 * @expectedException InvalidArgumentException
 	 */
 	public function testSetInvalidEmailFromAddress()
 	{
+	    $this->expectException(InvalidArgumentException::class);
 		$email = 'invalidemail';
 		$this->email->setFromAddress($email);	
 	}
