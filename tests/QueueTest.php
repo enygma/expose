@@ -25,7 +25,7 @@ class QueueTest extends TestCase
         $collection = new MockMongoCollection($return);
 
         $mock = $this->getMockBuilder(
-            '\\Expose\\Queue\\Mongo',
+            Mongo::class
         )->setMethods(array('getCollection'))
             ->getMock();
         $mock->expects($this->once())
